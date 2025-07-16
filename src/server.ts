@@ -1,3 +1,5 @@
+import dotenv from 'dotenv';
+dotenv.config();
 import connectDB from './config/mongo';
 import PaymentController from './controllers/payment.controller';
 import PaymentService from './services/payment.service';

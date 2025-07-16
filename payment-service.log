@@ -24,3 +24,23 @@
 {"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-07-16T12:28:11.162Z"}
 {"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-07-16T12:28:23.468Z"}
 {"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-07-16T12:29:22.638Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-07-16T13:31:16.704Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-07-16T13:32:05.443Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-07-16T13:32:29.166Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-07-16T13:32:54.235Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-07-16T13:34:43.638Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-07-16T13:35:13.729Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-07-16T13:37:03.788Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-07-16T13:37:14.472Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-07-16T13:37:26.654Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-07-16T13:38:01.943Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-07-16T13:38:31.264Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-07-16T13:38:46.495Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-07-16T13:39:20.112Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-07-16T13:40:18.749Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-07-16T13:45:50.534Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-07-16T13:46:20.519Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-07-16T13:48:20.047Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-07-16T13:52:03.581Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-07-16T14:09:51.209Z"}
+{"level":"error","message":"Amount mismatch with booking price","timestamp":"2025-07-16T14:11:57.330Z"}

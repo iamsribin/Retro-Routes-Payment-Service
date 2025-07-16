@@ -94,6 +94,17 @@ class RabbitMqClient {
       );
       await this.consumer.consumeMessages();
       this.isInitialized = true;
+
+      await this.consumerChannel.consume(
+        this.replyQueueName,
+        (msg) => {
+          if (msg) {
+            const correlationId = msg.properties.correlationId;
+            this.eventEmitter?.emit(correlationId, msg);
+          }
+        },
+        { noAck: true }
+      );
     } catch (error) {
       console.error("RabbitMQ error:", error);
     }
