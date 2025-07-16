@@ -35,7 +35,7 @@ export default class PaymentService {
       throw new Error('Payment already in progress');
     }
 
-    await this.validateData(data);
+    // await this.validateData(data); 
     const result = await this.stripeProcessor.processPayment(data);
     if (!result.sessionId) {
       throw new Error('Stripe session ID is missing');
@@ -182,13 +182,13 @@ export default class PaymentService {
 private async validateData(data: { bookingId: string; userId: string; driverId: string; amount: number }) {
   console.log("validating data");
   
-  const [bookingData] = await Promise.all([
+  const [bookingData,DriverData] = await Promise.all([
     rabbitmqClient.produce(
       { 
-        operation: 'booking.get', 
+        operation: 'validate_booking_id_for_payment', 
         payload: { bookingId: data.bookingId } 
       },
-      'booking.get'
+      'booking.validate_booking_id'
     ) as Promise<BookingData>,
 
     // rabbitmqClient.produce(
@@ -199,15 +199,16 @@ private async validateData(data: { bookingId: string; userId: string; driverId: 
     //   'user.get'
     // ) as Promise<UserData>,
 
-    // rabbitmqClient.produce(
-    //   { 
-    //     operation: 'driver.get', 
-    //     payload: { driverId: data.driverId } 
-    //   },
-    //   'driver.get'
-    // ) as Promise<DriverData>,
+    rabbitmqClient.produce(
+      { 
+        operation: 'validate_driver_id_for_payment', 
+        payload: { driverId: data.driverId } 
+      },
+      'driver.validate_driver_id'
+    ) as Promise<DriverData>,
   ]);
 console.log("bookingData",bookingData);
+console.log("DriverData",DriverData);
 
   if (!bookingData ) {
     throw new Error('Invalid booking, user, or driver data');

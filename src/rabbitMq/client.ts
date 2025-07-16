@@ -81,6 +81,12 @@ class RabbitMqClient {
         "booking.*"
       );
 
+      await this.consumerChannel.bindQueue(
+        rabbitmqConfig.rabbitMQ.queues.driverQueue,
+        rabbitmqConfig.rabbitMQ.exchange,
+        "driver.*"
+      );
+
       this.eventEmitter = new EventEmitter();
       this.producer = new Producer(
         this.produceChannel,
