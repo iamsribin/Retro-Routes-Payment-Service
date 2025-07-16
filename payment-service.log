@@ -1,0 +1,26 @@
+{"level":"error","message":"Error starting gRPC server: Name resolution failed for target dns:undefined:3003","stack":"Error: Name resolution failed for target dns:undefined:3003\n    at Object.onError (C:\\MERN-Microservice-Retro-Routes\\Retro-Routes-Payment-Service\\node_modules\\@grpc\\grpc-js\\src\\server.ts:803:18)\n    at C:\\MERN-Microservice-Retro-Routes\\Retro-Routes-Payment-Service\\node_modules\\@grpc\\grpc-js\\src\\resolver-dns.ts:240:25","timestamp":"2025-07-16T09:37:43.070Z"}
+{"level":"error","message":"Error starting gRPC server: Name resolution failed for target dns:undefined:3003","stack":"Error: Name resolution failed for target dns:undefined:3003\n    at Object.onError (C:\\MERN-Microservice-Retro-Routes\\Retro-Routes-Payment-Service\\node_modules\\@grpc\\grpc-js\\src\\server.ts:803:18)\n    at C:\\MERN-Microservice-Retro-Routes\\Retro-Routes-Payment-Service\\node_modules\\@grpc\\grpc-js\\src\\resolver-dns.ts:240:25","timestamp":"2025-07-16T09:38:34.874Z"}
+{"level":"error","message":"Error starting gRPC server: Name resolution failed for target dns:undefined:5003","stack":"Error: Name resolution failed for target dns:undefined:5003\n    at Object.onError (C:\\MERN-Microservice-Retro-Routes\\Retro-Routes-Payment-Service\\node_modules\\@grpc\\grpc-js\\src\\server.ts:803:18)\n    at C:\\MERN-Microservice-Retro-Routes\\Retro-Routes-Payment-Service\\node_modules\\@grpc\\grpc-js\\src\\resolver-dns.ts:240:25","timestamp":"2025-07-16T09:39:33.548Z"}
+{"level":"error","message":"Error starting gRPC server: Name resolution failed for target dns::5003","stack":"Error: Name resolution failed for target dns::5003\n    at Object.onError (C:\\MERN-Microservice-Retro-Routes\\Retro-Routes-Payment-Service\\node_modules\\@grpc\\grpc-js\\src\\server.ts:803:18)\n    at C:\\MERN-Microservice-Retro-Routes\\Retro-Routes-Payment-Service\\node_modules\\@grpc\\grpc-js\\src\\resolver-dns.ts:213:27\n    at processTicksAndRejections (node:internal/process/task_queues:95:5)","timestamp":"2025-07-16T09:41:29.321Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-07-16T09:42:19.562Z"}
+{"level":"error","message":"Invalid database name: 'Retro-Routes/payment'","timestamp":"2025-07-16T10:16:58.966Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-07-16T10:19:00.384Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-07-16T10:21:17.074Z"}
+{"level":"error","message":"Invalid database name: 'Retro-Routes/payment'","timestamp":"2025-07-16T10:22:31.934Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-07-16T10:24:31.111Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-07-16T10:25:14.724Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-07-16T10:26:53.898Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-07-16T10:55:27.288Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-07-16T11:05:52.488Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-07-16T11:06:20.756Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-07-16T11:06:50.417Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-07-16T11:27:21.332Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-07-16T11:41:18.639Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-07-16T11:42:19.799Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-07-16T11:47:07.252Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-07-16T11:54:15.252Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-07-16T11:56:04.648Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-07-16T12:26:54.087Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-07-16T12:28:11.162Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-07-16T12:28:23.468Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-07-16T12:29:22.638Z"}
