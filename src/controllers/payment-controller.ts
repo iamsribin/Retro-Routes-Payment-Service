@@ -1,16 +1,18 @@
 import { handleError } from '../utils/errorHandler';
-import PaymentService from '../services/payment.service';
-import { Metadata, ServerUnaryCall } from '@grpc/grpc-js';
+import PaymentService from '../services/payment-service';
+import { Metadata, sendUnaryData, ServerUnaryCall } from '@grpc/grpc-js';
+import { IResponse } from '../types/common/common-res';
+import { ConformCashPaymentDto } from '../dto/paymentRes.dto';
 
 export default class PaymentController {
-  constructor(private paymentService: PaymentService) {}
+  constructor(private _paymentService: PaymentService) {}
 
   async CreateCheckoutSession(
     call: ServerUnaryCall<any, any>,
     callback: (error: Error | null, response: any) => void
   ) {
     try {
-      const result = await this.paymentService.createCheckoutSession(call.request);
+      const result = await this._paymentService.createCheckoutSession(call.request);
       callback(null, result);
     } catch (error) {
       handleError(error, callback);
@@ -22,23 +24,25 @@ export default class PaymentController {
     callback: (error: Error | null, response: any) => void
   ) {
     try {
-      const result = await this.paymentService.processWalletPayment(call.request);
+      const result = await this._paymentService.processWalletPayment(call.request);
       callback(null, result);
     } catch (error) {
       handleError(error, callback);
     }
   }
 
-  async ProcessCashPayment(
-    call: ServerUnaryCall<any, any>,
-    callback: (error: Error | null, response: any) => void
+  async ConformCashPayment(
+    call: ServerUnaryCall<{bookingId: string, userId: string, driverId: string, amount: number,idempotencyKey:string},any>,
+    callback:  sendUnaryData<IResponse<ConformCashPaymentDto>>
   ) {
     try {
-      console.log("ethi...");
+      console.log("9000000000ijknm");
       
-      const result = await this.paymentService.processCashPayment(call.request);
-      callback(null, result);
-    } catch (error) {
+      const result = await this._paymentService.ConfirmCashPayment(call.request);
+      console.log("paymentService",result);
+      
+      callback(null, result); 
+    } catch (error) { 
       handleError(error, callback);
     }
   }
@@ -48,7 +52,7 @@ export default class PaymentController {
     callback: (error: Error | null, response: any) => void
   ) {
     try {
-      const transaction = await this.paymentService.getTransaction(call.request.transactionId);
+      const transaction = await this._paymentService.getTransaction(call.request.transactionId);
       callback(null, {
         transactionId: transaction.transactionId,
         bookingId: transaction.bookingId,
@@ -71,7 +75,7 @@ export default class PaymentController {
     callback: (error: Error | null, response: any) => void
   ) {
     try {
-      const result = await this.paymentService.handleWebhook(call.request.payload);
+      const result = await this._paymentService.handleWebhook(call.request.payload);
       callback(null, result);
     } catch (error) {
       handleError(error, callback);

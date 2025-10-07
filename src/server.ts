@@ -1,11 +1,11 @@
 import dotenv from 'dotenv';
 dotenv.config();
 import connectDB from './config/mongo';
-import PaymentController from './controllers/payment.controller';
-import PaymentService from './services/payment.service';
-import StripeService from './services/implementation/stripe.service';
-import WalletService from './services/implementation/wallet.service';
-import CashService from './services/implementation/cash.service';
+import PaymentController from './controllers/payment-controller';
+import PaymentService from './services/payment-service';
+import StripeService from './services/implementation/stripe-service';
+import WalletService from './services/implementation/wallet-service';
+import CashService from './services/implementation/cash-service';
 import TransactionRepositoryImpl from './repositories/implementation/transaction.repository';
 import { logger } from './utils/logger';
 
@@ -46,7 +46,7 @@ class App {
     server.addService(paymentPackage.Payment.service, {
       CreateCheckoutSession: paymentController.CreateCheckoutSession.bind(paymentController),
       ProcessWalletPayment: paymentController.ProcessWalletPayment.bind(paymentController),
-      ProcessCashPayment: paymentController.ProcessCashPayment.bind(paymentController),
+      ConformCashPayment: paymentController.ConformCashPayment.bind(paymentController),
       GetTransaction: paymentController.GetTransaction.bind(paymentController),
       HandleWebhook: paymentController.HandleWebhook.bind(paymentController),
     });

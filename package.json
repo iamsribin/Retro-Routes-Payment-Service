@@ -1,5 +1,5 @@
 {
-  "name": "retro-routes-paymet-service",
+  "name": "retro-routes-payment-service",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
@@ -11,7 +11,6 @@
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {
-    "@types/amqplib": "^0.10.5",
     "@types/express": "^5.0.3",
     "@types/node": "^24.0.14",
     "nodemon": "^3.1.10",
@@ -20,7 +19,8 @@
   },
   "dependencies": {
     "@grpc/grpc-js": "^1.13.4",
-    "amqplib": "^0.10.4",
+    "@types/amqplib": "^0.10.7",
+    "amqplib": "^0.10.8",
     "dotenv": "^17.2.0",
     "express": "^5.1.0",
     "mongoose": "^8.16.3",
