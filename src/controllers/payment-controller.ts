@@ -3,21 +3,22 @@ import { sendUnaryData, ServerUnaryCall } from '@grpc/grpc-js';
 import { IResponse } from '../types/common/common-res';
 import { ConformCashPaymentDto } from '../dto/paymentRes.dto';
 import { IPaymentService } from '../services/interface/i-payment-service';
+import { PaymentReq } from '../types/request';
 
 export default class PaymentController {
   constructor(private _paymentService: IPaymentService) {}
 
-  // async CreateCheckoutSession(
-  //   call: ServerUnaryCall<any, any>,
-  //   callback: (error: Error | null, response: any) => void
-  // ) {
-  //   try {
-  //     const result = await this._paymentService.createCheckoutSession(call.request);
-  //     callback(null, result);
-  //   } catch (error) {
-  //     handleError(error, callback);
-  //   }
-  // }
+  async CreateCheckoutSession(
+    call: ServerUnaryCall<PaymentReq, any>,
+    callback: (error: Error | null, response: any) => void
+  ) {
+    try {
+      const result = await this._paymentService.createCheckoutSession(call.request);
+      callback(null, result);
+    } catch (error) {
+      handleError(error, callback);
+    }
+  }
 
   // async ProcessWalletPayment(
   //   call: ServerUnaryCall<any, any>,

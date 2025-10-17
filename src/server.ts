@@ -39,7 +39,7 @@ class App {
     const paymentController = new PaymentController(paymentService);
 
     server.addService(paymentPackage.Payment.service, {
-      // CreateCheckoutSession: paymentController.CreateCheckoutSession.bind(paymentController),
+      CreateCheckoutSession: paymentController.CreateCheckoutSession.bind(paymentController),
       // ProcessWalletPayment: paymentController.ProcessWalletPayment.bind(paymentController),
       ConformCashPayment: paymentController.ConformCashPayment.bind(paymentController),
       // GetTransaction: paymentController.GetTransaction.bind(paymentController),
