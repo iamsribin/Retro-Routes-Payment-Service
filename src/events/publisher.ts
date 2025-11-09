@@ -1,8 +1,8 @@
 import amqp from 'amqplib';
 
 export class RabbitMQPublisher {
-  private static ch: any; // Using any to avoid type conflicts
-  private static conn: any; // Using any to avoid type conflicts
+  private static ch: any; 
+  private static conn: any; 
   private static isInitialized: boolean = false;
 
   static async initialize(channel: any) {
@@ -10,7 +10,6 @@ export class RabbitMQPublisher {
     this.isInitialized = true;
   }
 
-  // Lazy initialization method
   private static async ensureInitialized() {
     if (!this.isInitialized) {
       try {
@@ -31,7 +30,7 @@ export class RabbitMQPublisher {
   }
 
   static async publish(routingKey: string, data: any): Promise<void> {
-    // Ensure channel is initialized before publishing
+
     await this.ensureInitialized();
     
     if (!this.ch) {
@@ -57,7 +56,6 @@ export class RabbitMQPublisher {
     }
   }
 
-  // Cleanup method for graceful shutdown
   static async close() {
     try {
       if (this.ch && typeof this.ch.close === 'function') {

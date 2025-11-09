@@ -289,3 +289,130 @@
 {"level":"error","message":"Operation `transactions.findOneAndUpdate()` buffering timed out after 10000ms","timestamp":"2025-10-15T13:43:13.443Z"}
 {"level":"error","message":"Operation `transactions.findOneAndUpdate()` buffering timed out after 10000ms","timestamp":"2025-10-15T13:43:17.260Z"}
 {"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-15T15:33:06.497Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-17T18:45:19.020Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-17T18:48:39.158Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T12:14:29.310Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T12:14:29.320Z"}
+{"error":"Payment already in progress","level":"error","message":"Saga Orchestration Error:","timestamp":"2025-10-23T12:14:56.978Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T12:17:28.462Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T12:17:28.479Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T12:25:45.507Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T12:25:45.525Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T12:26:25.050Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T12:26:25.064Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T12:26:31.589Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T12:26:31.598Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T12:27:11.062Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T12:27:11.074Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T14:25:09.794Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T14:25:09.813Z"}
+{"driverId":"68933743b49a8cf584ff3ef5","level":"warn","message":"Driver stripe account not ready","stripeId":"acct_1SLHqG1zlTMiraRx","timestamp":"2025-10-23T14:25:21.232Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T14:35:45.449Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T14:35:45.487Z"}
+{"driverId":"68933743b49a8cf584ff3ef5","level":"warn","message":"Driver stripe account not ready","stripeId":"acct_1SLHqG1zlTMiraRx","timestamp":"2025-10-23T14:36:02.223Z"}
+{"driverId":"68933743b49a8cf584ff3ef5","level":"warn","message":"Driver stripe account not ready","stripeId":"acct_1SLHqG1zlTMiraRx","timestamp":"2025-10-23T14:40:34.723Z"}
+{"driverId":"68933743b49a8cf584ff3ef5","level":"warn","message":"Driver stripe account not ready","stripeId":"acct_1SLHqG1zlTMiraRx","timestamp":"2025-10-23T14:43:39.640Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T14:45:33.286Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T14:45:33.298Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T14:46:49.929Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T14:46:49.948Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T14:47:10.539Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T14:47:10.551Z"}
+{"driverId":"68933743b49a8cf584ff3ef5","level":"warn","message":"Driver stripe account not ready","stripeId":"acct_1SLHqG1zlTMiraRx","timestamp":"2025-10-23T14:47:30.940Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T14:48:03.765Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T14:48:03.779Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T15:02:04.658Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T15:02:04.679Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T15:06:48.986Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T15:06:49.004Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T15:07:05.862Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T15:07:05.876Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T15:07:58.823Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T15:07:58.863Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T15:10:05.870Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T15:10:06.179Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T15:10:32.603Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T15:10:32.617Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T15:10:58.061Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T15:10:58.072Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T15:14:59.782Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T15:14:59.802Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T15:23:10.947Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T15:23:10.968Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T15:23:20.605Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T15:23:20.617Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T15:26:28.127Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T15:26:28.138Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T15:43:36.817Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T15:43:36.834Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T15:44:55.854Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T15:44:55.870Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T15:45:47.103Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T15:45:47.127Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T15:47:23.968Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T15:47:23.976Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T15:47:49.289Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T15:47:49.303Z"}
+{"driverId":"68933743b49a8cf584ff3ef5","level":"warn","message":"Driver stripe account not ready","stripeId":"acct_1SLQiD1kAmVkPtnD","timestamp":"2025-10-23T15:48:00.972Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T15:59:45.156Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T15:59:45.172Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T16:00:08.684Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T16:00:08.700Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T16:01:07.795Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T16:01:07.814Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T16:04:54.613Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T16:04:54.633Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T16:05:01.732Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T16:05:01.741Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T16:05:14.662Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T16:05:14.670Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T16:26:31.735Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T16:26:31.770Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T16:28:02.198Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T16:28:02.209Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T16:29:41.656Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T16:29:41.686Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T16:30:47.353Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T16:30:47.363Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T16:58:04.587Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T16:58:04.609Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T17:02:30.378Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T17:02:30.396Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T17:07:58.045Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T17:07:58.061Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T17:08:31.867Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T17:08:31.876Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T17:10:47.676Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T17:10:47.698Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T17:10:59.108Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T17:10:59.118Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T17:12:22.499Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T17:12:22.509Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T17:12:29.956Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T17:12:29.965Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T17:12:48.131Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T17:12:48.141Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T17:13:23.153Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T17:13:23.162Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T17:29:21.709Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T17:29:21.726Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T17:29:35.129Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T17:29:35.139Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T17:29:51.454Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T17:29:51.463Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T17:30:11.072Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T17:30:11.084Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T17:30:49.723Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T17:30:49.731Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T17:37:45.735Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T17:37:45.753Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T17:37:56.745Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T17:37:56.753Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T17:38:28.472Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T17:38:28.482Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T18:59:45.213Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T18:59:45.236Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T19:06:38.755Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T19:06:38.771Z"}
+{"level":"info","message":"Payment webhook server listening on 4242","timestamp":"2025-10-23T19:17:38.166Z"}
+{"level":"info","message":"gRPC payment server started on port 5003","timestamp":"2025-10-23T19:17:38.184Z"}

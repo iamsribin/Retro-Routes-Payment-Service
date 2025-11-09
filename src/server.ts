@@ -5,6 +5,10 @@ import PaymentController from './controllers/payment-controller';
 import {PaymentService} from './services/implementation/payment-service';
 import TransactionRepositoryImpl from './repositories/implementation/transaction.repository';
 import { logger } from './utils/logger';
+import express from 'express';
+import { StripeService } from './services/implementation/stripe-service';
+import { IStripeService } from './services/interface/i-stripe-service';
+import { IPaymentService } from './services/interface/i-payment-service';
 
 class App {
   constructor() {
@@ -12,13 +16,16 @@ class App {
   }
 
   private async initialize() {
-    await connectDB();
+    await connectDB(); 
     const transactionRepository = new TransactionRepositoryImpl();
     const paymentService = new PaymentService(transactionRepository);
-    this.startGrpcServer(paymentService);
+    const stripeService = new StripeService(transactionRepository);
+    const paymentController = new PaymentController(paymentService,stripeService);
+    this.startGrpcServer(paymentService,stripeService);
+    this.startHttpWebhookServer(paymentController)
   }
 
-  private startGrpcServer(paymentService: PaymentService) {
+  private startGrpcServer(paymentService: IPaymentService,stripeService:IStripeService) {
     const grpc = require('@grpc/grpc-js');
     const protoLoader = require('@grpc/proto-loader');
     const path = require('path');
@@ -36,12 +43,12 @@ class App {
 
     const server = new grpc.Server();
     
-    const paymentController = new PaymentController(paymentService);
+    const paymentController = new PaymentController(paymentService,stripeService);
 
     server.addService(paymentPackage.Payment.service, {
       CreateCheckoutSession: paymentController.CreateCheckoutSession.bind(paymentController),
-      // ProcessWalletPayment: paymentController.ProcessWalletPayment.bind(paymentController),
       ConformCashPayment: paymentController.ConformCashPayment.bind(paymentController),
+      // ProcessWalletPayment: paymentController.ProcessWalletPayment.bind(paymentController),
       // GetTransaction: paymentController.GetTransaction.bind(paymentController),
       // HandleWebhook: paymentController.HandleWebhook.bind(paymentController),
     });
@@ -56,6 +63,26 @@ class App {
       }
       logger.info(`gRPC payment server started on port ${bindPort}`);
     });
+  }
+
+   private startHttpWebhookServer(paymentController: PaymentController) {
+    const app = express();
+
+    app.get('/health', (_req, res) => res.status(200).send('ok'));
+
+    app.post('/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
+      try {
+        await paymentController.handleStripeWebhook(req.body as Buffer, req.headers);
+        res.status(200).send({ received: true });
+      } catch (err: any) {
+        logger.error('Webhook processing failed:', err);
+        const code = err.message?.includes('signature') ? 400 : 500;
+        res.status(code).send({ error: err.message });
+      }
+    });
+
+    const httpPort = Number(process.env.PAYMENT_WEBHOOK_PORT || 4242);
+    app.listen(httpPort, () => logger.info(`Payment webhook server listening on ${httpPort}`));
   }
 }
 
