@@ -1,19 +1,19 @@
 import * as grpc from '@grpc/grpc-js';
 import { paymentServiceDescriptor } from '@Pick2Me/shared';
-import { createDriverHandlers } from './handlers';
+import { createPaymentHandlers } from './handlers/handler';
 import { container } from '../config/inversify.config';
 import { TYPES } from '../types/inversify-types';
-import { IDriverController } from '../controllers/interfaces/i-driver-controller';
+import { PaymentController } from '../controllers/payment-controller';
 
 if (!paymentServiceDescriptor) {
   console.error('userServiceDescriptor is missing. Inspect loaded proto package.');
   process.exit(1);
 }
 
-const driverController = container.get<IDriverController>(TYPES.DriverController);
+const paymentController = container.get<PaymentController>(TYPES.PaymentController);
 
-const handlers = createDriverHandlers({
-  driverController,
+const handlers = createPaymentHandlers({
+  paymentController,
 });
 
 export const startGrpcServer = () => {

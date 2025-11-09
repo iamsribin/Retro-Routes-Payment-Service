@@ -8,7 +8,7 @@ import { logger } from "../utils/logger";
 import { IncomingHttpHeaders } from "http";
 import { IStripeService } from "../services/interface/i-stripe-service";
 
-export default class PaymentController {
+export class PaymentController {
   constructor(
     private _paymentService: IPaymentService,
     private _stripeService: IStripeService
