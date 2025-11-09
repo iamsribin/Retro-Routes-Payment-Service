@@ -15,7 +15,7 @@ import {
   addDriverEarnings,
   getDriverStripeFromDriverService,
   markBookingAsPaid,
-} from "../../grpc/GrpcClients";
+} from "../../grpc/clients/booking-client";
 import { ConformCashPaymentDto } from "../../dto/paymentRes.dto";
 
 export class StripeService implements IStripeService {

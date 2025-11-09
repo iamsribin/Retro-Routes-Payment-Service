@@ -1,5 +1,4 @@
-import { bookingClient, driverClient } from "./index"; 
-
+import { bookingClient, driverClient } from "../connection";
 
 
 export async function markBookingAsPaid(bookingId: string, paymentId: string) {
@@ -11,7 +10,6 @@ export async function markBookingAsPaid(bookingId: string, paymentId: string) {
     });
   });
 }
-
 
 export async function rollbackBooking(bookingId: string) {
   return new Promise<void>((resolve, reject) => {

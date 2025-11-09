@@ -5,7 +5,7 @@ import { StatusCode } from "../../types/common/status-code";
 import { RabbitMQPublisher } from "../../events/publisher";
 import { randomUUID } from "crypto";
 import { IPaymentService } from "../interface/i-payment-service";
-import { addDriverEarnings, markBookingAsPaid } from "../../grpc/GrpcClients";
+import { addDriverEarnings, markBookingAsPaid } from "../../grpc/clients/booking-client";
 
 export class PaymentService implements IPaymentService {
   constructor(private _transactionRepository: ITransactionRepository) {}
