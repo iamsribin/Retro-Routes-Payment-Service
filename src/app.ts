@@ -1,16 +1,28 @@
-import express from 'express';
-import cookieParser from 'cookie-parser';
-import { errorHandler } from '@Pick2Me/shared';
+import Fastify from "fastify";
+import cookie from "fastify-cookie";
+import errorHandlerPlugin from "@/plugins/errorHandler.plugin";
+import walletRoutes from "@/routes/wallet-routes";
+import verifyGatewayJwtPlugin from "@/plugins/verifyGatewayJwt.plugin";
 
-// create app
-const app = express();
+const app = Fastify({
+  logger: {
+    level: 'info',
+    transport: {
+      target: 'pino-pretty',
+      options: {
+        singleLine: true,
+        ignore: 'pid,hostname,reqId',
+      },
+    },
+  },
+  pluginTimeout: 10000,
+});
 
-// middlewares
-app.use(express.json());
-app.use(cookieParser());
+app.register(cookie);
 
-// error handler
-app.use(errorHandler);
+app.register(verifyGatewayJwtPlugin);
+app.register(errorHandlerPlugin);
 
-// export app
+app.register(walletRoutes, { prefix: "/" });
+
 export default app;

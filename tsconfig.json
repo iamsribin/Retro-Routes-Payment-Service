@@ -1,15 +1,43 @@
+// {
+//   "compilerOptions": {
+//     "target": "ES2020",
+//     "module": "commonjs",
+//     "moduleResolution": "node",
+//     "esModuleInterop": true,
+//     "strict": true,
+//     "skipLibCheck": true,
+//     "resolveJsonModule": true,
+//     "outDir": "./build",         
+//     "rootDir": "./src",          
+//     "noEmit": true               
+//   },
+//   "include": ["src/**/*.ts", "src/types/**/*.d.ts"]             
+// }
+
 {
   "compilerOptions": {
-    "target": "ES2020",
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "strict": true,
+    "module": "ES2020",
+    "declaration": true,
+    "moduleResolution": "bundler",
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "es2023",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
     "skipLibCheck": true,
+    "strictNullChecks": true,
     "forceConsistentCasingInFileNames": true,
-    "outDir": "./build",         // Optional (ts-node won't use this)
-    "rootDir": "./src",          // Optional
-    "noEmit": true               // ✅ Do not emit `.js` files
-  },
-  "include": ["src"]             // Adjust if your files are elsewhere
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@/*": [
+        "src/*"
+      ]
+    }
+  }
 }

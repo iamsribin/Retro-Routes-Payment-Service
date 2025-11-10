@@ -10,13 +10,13 @@ import { PaymentReq } from "../../types/request";
 import { IncomingHttpHeaders } from "http";
 import Stripe from "stripe";
 import { IStripeService } from "../interface/i-stripe-service";
-import { redisRepo } from "../../config/redis.config";
 import {
   addDriverEarnings,
   getDriverStripeFromDriverService,
   markBookingAsPaid,
 } from "../../grpc/clients/booking-client";
 import { ConformCashPaymentDto } from "../../dto/paymentRes.dto";
+import { getRedisService } from "@Pick2Me/shared";
 
 export class StripeService implements IStripeService {
   constructor(private _transactionRepository: ITransactionRepository) {}
@@ -48,7 +48,8 @@ export class StripeService implements IStripeService {
       const driverShareCents = cents - platformFeeCents;
 
       //Redis cache
-      let driverDetails = await redisRepo.getDriverDetails(data.driverId, true);
+      const redisRepo = getRedisService()
+      let driverDetails = await redisRepo.getDriverDetails(data.driverId, true) as any;
 
       console.log("driverDetails redis", driverDetails);
 
