@@ -1,6 +1,10 @@
 import { stripe } from "@/config/stripe";
+import { IGrpcPaymentService } from "../interface/i-grpc-payment-service";
+import { injectable } from "inversify";
 
-export class GrpcPaymentService {
+@injectable()
+export class GrpcPaymentService  implements IGrpcPaymentService{
+
   createDriverConnectAccount = async (
     email: string,
     driverId: string

@@ -1,11 +1,11 @@
 import { sendUnaryData, ServerUnaryCall } from "@grpc/grpc-js";
-import { injectable } from "inversify";
-import { GrpcPaymentService } from "@/services/implementation/grpc-payment-service";
-
+import { inject, injectable } from "inversify";
+import { TYPES } from "@/types/inversify-types";
+import { IGrpcPaymentService } from "@/services/interface/i-grpc-payment-service";
 
 @injectable()
 export class GrpcPaymentController {
-  constructor(private _grpcPaymentService:GrpcPaymentService){}
+  constructor(@inject(TYPES.GrpcPaymentService) private _grpcPaymentService:IGrpcPaymentService){}
 
   createDriverConnectAccount = async (
     call: ServerUnaryCall<

@@ -9,7 +9,6 @@ export interface VerifyOpts {
   options?: { role?: IRole | IRole[] };
 }
 
-
 const verifyGatewayJwtPlugin: FastifyPluginAsync = async (fastify, opts) => {
     
   function makePreHandler(strict = true, GATEWAY_SECRET = "", options?: { role?: IRole | IRole[] }) {
