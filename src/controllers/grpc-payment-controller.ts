@@ -1,10 +1,12 @@
 import { sendUnaryData, ServerUnaryCall } from "@grpc/grpc-js";
-import { stripe } from "../config/stripe";
 import { injectable } from "inversify";
+import { GrpcPaymentService } from "@/services/implementation/grpc-payment-service";
 
 
 @injectable()
 export class GrpcPaymentController {
+  constructor(private _grpcPaymentService:GrpcPaymentService){}
+
   createDriverConnectAccount = async (
     call: ServerUnaryCall<
       { email: string; driverId: string },
@@ -14,33 +16,10 @@ export class GrpcPaymentController {
   ): Promise<void> => {
     try {
       const { driverId, email } = call.request;
-     console.log({ driverId, email });
 
-      const account = stripe.accounts.create({
-        type: "express",
-        country: "GB",
-        email: email,
-        capabilities: {
-          card_payments: { requested: true },
-          transfers: { requested: true },
-        },
-        business_type: "individual",
+      const accountData = await this._grpcPaymentService.createDriverConnectAccount( email,driverId );
 
-        metadata: {
-          driverId: driverId,
-        },
-      });
-
-      const account_id = (await account).id;
-
-      const accountLink = await stripe.accountLinks.create({
-        account: account_id,
-        refresh_url: `${process.env.FRONTEND_URL}/onboard/refresh`,
-        return_url: `${process.env.FRONTEND_URL}/onboard/complete`,
-        type: "account_onboarding",
-      });
-
-      callback(null, { accountId: account_id, accountLinkUrl: accountLink.url });
+      callback(null, accountData);
     } catch (err) {
       console.log(err);
       throw new Error("Stripe account creation failed");

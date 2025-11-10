@@ -1,11 +1,10 @@
-import { ITransactionRepository } from "../../interfaces/repository.interface";
-import { logger } from "../../utils/logger";
-import { ConformCashPaymentDto } from "../../dto/paymentRes.dto";
-import { StatusCode } from "../../types/common/status-code";
-import { RabbitMQPublisher } from "../../events/publisher";
+import { ITransactionRepository } from "@/interfaces/repository.interface";
+import { ConformCashPaymentDto } from "@/dto/paymentRes.dto";
+import { RabbitMQPublisher } from "@/events/publisher";
 import { randomUUID } from "crypto";
 import { IPaymentService } from "../interface/i-payment-service";
-import { addDriverEarnings, markBookingAsPaid } from "../../grpc/clients/booking-client";
+import { addDriverEarnings, markBookingAsPaid } from "@/grpc/clients/booking-client";
+import { StatusCode } from "@Pick2Me/shared";
 
 export class PaymentService implements IPaymentService {
   constructor(private _transactionRepository: ITransactionRepository) {}
@@ -77,7 +76,6 @@ export class PaymentService implements IPaymentService {
         message: "Cash payment confirmed successfully",
       };
     } catch (error: any) {
-      logger.error("Saga Orchestration Error:", { error: error.message });
       await this._transactionRepository.updateStatusByKey(
         `booking_${data.bookingId}`,
         "failed"

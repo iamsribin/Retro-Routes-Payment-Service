@@ -1,12 +1,10 @@
-import { handleError } from "../utils/errorHandler";
 import { sendUnaryData, ServerUnaryCall } from "@grpc/grpc-js";
-import { IResponse } from "../types/common/common-res";
 import { ConformCashPaymentDto } from "../dto/paymentRes.dto";
 import { IPaymentService } from "../services/interface/i-payment-service";
 import { PaymentReq } from "../types/request";
-import { logger } from "../utils/logger";
 import { IncomingHttpHeaders } from "http";
 import { IStripeService } from "../services/interface/i-stripe-service";
+import { InternalError, IResponse } from "@Pick2Me/shared";
 
 export class PaymentController {
   constructor(
@@ -24,7 +22,7 @@ export class PaymentController {
       );
       callback(null, result);
     } catch (error) {
-      handleError(error, callback);
+      InternalError(error, callback);
     }
   }
 
@@ -39,7 +37,7 @@ export class PaymentController {
     try {
       await this._stripeService.handleStripeWebhook(rawBody, headers);
     } catch (err: any) {
-      logger.error("PaymentController.handleStripeWebhook error", {
+      console.error("PaymentController.handleStripeWebhook error", {
         error: err?.message ?? err,
       });
       throw err;
@@ -66,7 +64,7 @@ export class PaymentController {
 
       callback(null, result);
     } catch (error) {
-      handleError(error, callback);
+      InternalError(error, callback);
     }
   }
 }

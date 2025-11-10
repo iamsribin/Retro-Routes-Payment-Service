@@ -1,8 +1,6 @@
 import { ITransactionRepository } from "../../interfaces/repository.interface";
-import { logger } from "../../utils/logger";
 import { ITransaction } from "../../models/transaction.modal";
 import { stripe } from "../../config/stripe";
-import { StatusCode } from "../../types/common/status-code";
 import { RabbitMQPublisher } from "../../events/publisher";
 import { randomUUID } from "crypto";
 import { StripeCheckoutSessionRes } from "../../types/response";
@@ -16,7 +14,7 @@ import {
   markBookingAsPaid,
 } from "../../grpc/clients/booking-client";
 import { ConformCashPaymentDto } from "../../dto/paymentRes.dto";
-import { getRedisService } from "@Pick2Me/shared";
+import { getRedisService, StatusCode } from "@Pick2Me/shared";
 
 export class StripeService implements IStripeService {
   constructor(private _transactionRepository: ITransactionRepository) {}
@@ -58,7 +56,7 @@ export class StripeService implements IStripeService {
         try {
           driverDetails = await getDriverStripeFromDriverService(data.driverId);
         } catch (err: any) {
-          logger.warn("Failed to fetch driver from driver service", {
+          console.warn("Failed to fetch driver from driver service", {
             driverId: data.driverId,
             err: err?.message ?? err,
           });
@@ -77,7 +75,7 @@ export class StripeService implements IStripeService {
         const acct = await stripe.accounts.retrieve(driverDetails.stripeId);
 
         if (!acct || !acct.charges_enabled) {
-          logger.warn("Driver stripe account not ready", {
+          console.warn("Driver stripe account not ready", {
             driverId: data.driverId,
             stripeId: driverDetails.stripeId,
           });
@@ -87,7 +85,7 @@ export class StripeService implements IStripeService {
           };
         }
       } catch (err: any) {
-        logger.error("Failed to validate driver stripe account", {
+        console.error("Failed to validate driver stripe account", {
           stripeId: driverDetails.stripeId,
           err: err?.message ?? err,
         });
@@ -202,7 +200,7 @@ export class StripeService implements IStripeService {
           );
         }
       } catch (upErr) {
-        logger.error("Failed to update transaction status after stripe error", {
+        console.error("Failed to update transaction status after stripe error", {
           error: upErr,
         });
       }

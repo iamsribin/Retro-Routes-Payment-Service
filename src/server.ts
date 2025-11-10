@@ -5,22 +5,16 @@ import { startGrpcServer } from './grpc/server';
 import { isEnvDefined } from './utils/envChecker';
 import { connectDB } from '@Pick2Me/shared';
 
-// server
 const startServer = async () => {
   try {
-    // check all env are defined
     isEnvDefined();
 
-    // connect to db
     connectDB(process.env.MONGO_URL!);
 
-    //start rabbit consumer
     // consumer.start()
 
-    // start grpc server
     startGrpcServer();
 
-    //listen to port 
     const port = Number(process.env.PORT) || 3000;
     await app.listen({ port, host: "0.0.0.0" });
     app.log.info(`payment service running on port ${port}`);

@@ -1,7 +1,7 @@
 import fp from "fastify-plugin";
 import { FastifyPluginAsync } from "fastify";
 import jwt from "jsonwebtoken";
-import { AccessPayload, IRole } from "@Pick2Me/shared"; 
+import { AccessPayload, IRole, StatusCode } from "@Pick2Me/shared"; 
 
 export interface VerifyOpts {
   strict?: boolean;
@@ -23,7 +23,7 @@ const verifyGatewayJwtPlugin: FastifyPluginAsync = async (fastify, opts) => {
 
       if (!raw) {
         if (strict) {
-          reply.status(401).send({ message: "Missing gateway token" });
+          reply.status(StatusCode.Unauthorized).json({ message: "Missing gateway token" });
           return;
         }
         request.gatewayUser = null;
@@ -35,7 +35,7 @@ const verifyGatewayJwtPlugin: FastifyPluginAsync = async (fastify, opts) => {
 
         if (!decoded || typeof decoded !== "object" || !decoded.id || !decoded.role) {
           if (strict) {
-            reply.status(401).send({ message: "Invalid gateway token (claims missing)" });
+            reply.status(StatusCode.Unauthorized).json({ message: "Invalid gateway token (claims missing)" });
             return;
           }
           request.gatewayUser = null;
@@ -51,7 +51,7 @@ const verifyGatewayJwtPlugin: FastifyPluginAsync = async (fastify, opts) => {
           const required = Array.isArray(options.role) ? options.role : [options.role];
           if (!required.includes(gatewayUser.role)) {
             if (strict) {
-              reply.status(403).send({ message: "Forbidden: role mismatch" });
+              reply.status(StatusCode.Forbidden).json({ message: "Forbidden: role mismatch" });
               return;
             }
             request.gatewayUser = null;
@@ -63,7 +63,7 @@ const verifyGatewayJwtPlugin: FastifyPluginAsync = async (fastify, opts) => {
       } catch (err: any) {
         const message = err?.message || "Invalid gateway token";
         if (strict) {
-          reply.status(401).send({ message: `Invalid gateway token: ${message}` });
+          reply.status(StatusCode.Unauthorized).json({ message: `Invalid gateway token: ${message}` });
           return;
         }
         request.gatewayUser = null;
