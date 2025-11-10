@@ -2,7 +2,7 @@
   "name": "retro-routes-payment-service",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "server.js",
   "scripts": {
     "start": "nodemon"
   },

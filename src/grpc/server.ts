@@ -3,35 +3,35 @@ import { paymentServiceDescriptor } from '@Pick2Me/shared';
 import { createPaymentHandlers } from './handlers/handler';
 import { container } from '../config/inversify.config';
 import { TYPES } from '../types/inversify-types';
-import { PaymentController } from '../controllers/payment-controller';
+import { GrpcPaymentController } from '../controllers/grpc-payment-controller';
 
 if (!paymentServiceDescriptor) {
-  console.error('userServiceDescriptor is missing. Inspect loaded proto package.');
+  console.error('paymentServiceDescriptor is missing. Inspect loaded proto package.');
   process.exit(1);
 }
 
-const paymentController = container.get<PaymentController>(TYPES.PaymentController);
+const grpcPaymentController = container.get<GrpcPaymentController>(TYPES.GrpcPaymentController);
 
 const handlers = createPaymentHandlers({
-  paymentController,
+  grpcPaymentController
 });
 
 export const startGrpcServer = () => {
   try {
     const server = new grpc.Server();
 
-    // Register driver service gRPC functions
+    // Register payment service gRPC functions
     server.addService(paymentServiceDescriptor, handlers);
 
-    // Bind server
+    // Bind server 
     server.bindAsync(
-      process.env.GRPC_URL as string,
+      process.env.PAYMENT_GRPC_HOST as string,
       grpc.ServerCredentials.createInsecure(),
       () => {
-        console.log(`GRPC server for user service running on port ${process.env.GRPC_URL}`);
+        console.log(`GRPC server for user service running on port ${process.env.PAYMENT_GRPC_HOST}`);
       }
     );
-  } catch (err) {
+  } catch (err) {  
     console.log(err);
   }
 };

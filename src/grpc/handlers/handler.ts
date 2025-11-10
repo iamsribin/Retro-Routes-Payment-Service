@@ -1,13 +1,13 @@
-import { PaymentController } from "../../controllers/payment-controller";
+import { GrpcPaymentController } from "../../controllers/grpc-payment-controller";
 
 
 type Handlers = {
-  paymentController: PaymentController;
+  grpcPaymentController: GrpcPaymentController
 };
 
 export function createPaymentHandlers(controller:Handlers){
-    const {paymentController} = controller;
+    const {grpcPaymentController} = controller;
     return{
-        createDriverWallet:paymentController.CreateCheckoutSession
+        CreateDriverConnectAccount: grpcPaymentController.createDriverConnectAccount
     }
 }

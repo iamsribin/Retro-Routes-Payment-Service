@@ -21,13 +21,13 @@ const startServer = async () => {
     // start grpc server
     startGrpcServer();
 
-    //listen to port
+    //listen to port 
     app.listen(process.env.PORT, () =>
       console.log(`payment service running on port ${process.env.PORT}`)
     );
   } catch (err: unknown) {
     console.log(err);
-  }
+  } 
 };
 
 startServer();
