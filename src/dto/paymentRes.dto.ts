@@ -1,4 +1,4 @@
-import { StatusCode } from "../types/common/status-code";
+import { StatusCode } from "@Pick2Me/shared";
 
 
 export interface ConformCashPaymentDto{

@@ -11,7 +11,7 @@ const app = Fastify({
       target: 'pino-pretty',
       options: {
         singleLine: true,
-        ignore: 'pid,hostname,reqId',
+        // ignore: 'pid,hostname,reqId',
       },
     },
   },
@@ -21,8 +21,9 @@ const app = Fastify({
 app.register(cookie);
 
 app.register(verifyGatewayJwtPlugin);
-app.register(errorHandlerPlugin);
 
 app.register(walletRoutes, { prefix: "/" });
+
+app.register(errorHandlerPlugin); 
 
 export default app;

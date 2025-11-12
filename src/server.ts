@@ -1,9 +1,10 @@
-import 'dotenv/config';
+import "dotenv/config";
 
-import app from './app';
-import { startGrpcServer } from './grpc/server';
-import { isEnvDefined } from './utils/envChecker';
-import { connectDB } from '@Pick2Me/shared';
+import app from "./app";
+import { startGrpcServer } from "./grpc/server";
+import { isEnvDefined } from "./utils/envChecker";
+import { connectDB, RabbitMQ } from "@Pick2Me/shared";
+import { UserEventConsumer } from "./events/consumer";
 
 const startServer = async () => {
   try {
@@ -11,28 +12,31 @@ const startServer = async () => {
 
     connectDB(process.env.MONGO_URL!);
 
-    // consumer.start()
+    await RabbitMQ.connect({
+      url: process.env.RABBIT_URL!,
+      serviceName: "payment-service",
+    });
+
+    await UserEventConsumer.init();
 
     startGrpcServer();
 
     const port = Number(process.env.PORT) || 3000;
     await app.listen({ port, host: "0.0.0.0" });
     app.log.info(`payment service running on port ${port}`);
-
-  } catch (err: unknown) { 
-     app.log.error(err);
-     process.exit(1);
-  } 
+  } catch (err: unknown) {
+    app.log.error(err);
+    process.exit(1);
+  }
 };
 
 startServer();
 
-
 const shutdown = async () => {
   try {
     app.log.info("Shutting down...");
-    await app.close(); 
-    // await consumer.stop?.(); 
+    await app.close();
+    // await consumer.stop?.();
     // await stopGrpcServer?.();
     process.exit(0);
   } catch (e) {
