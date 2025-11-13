@@ -4,18 +4,31 @@ import { TYPES } from '@/types/inversify-types';
 import { EXCHANGES, QUEUES, RabbitMQ, ROUTING_KEYS } from '@Pick2Me/shared';
 
 const userWalletService = container.get<IUserWalletService>(TYPES.UserWalletService);
+
 export class UserEventConsumer {
   static async init() {
-    await RabbitMQ.setupExchange(EXCHANGES.USER);
-    await RabbitMQ.setupQueueWithRetry(
-      EXCHANGES.USER,
-      QUEUES.PAYMENT_SERVICE,
-      ROUTING_KEYS.USER_WALLET_CREATE
-    );
+    await RabbitMQ.connect({ url: process.env.RABBIT_URL!, serviceName: 'payment-service' });
 
-    await RabbitMQ.consume(QUEUES.PAYMENT_SERVICE, async (data) => {
-      console.log('[PaymentService] 👂 Received wallet.created event:', data);
-      await userWalletService.createWalletForUser(data.userId, data.currency);
+    await RabbitMQ.setupExchange(EXCHANGES.USER, 'topic');
+
+    await RabbitMQ.bindQueueToExchanges(QUEUES.PAYMENT_QUEUE, [
+      {
+        exchange: EXCHANGES.USER,
+        routingKeys: ['user-payment.#'],
+      },
+    ]);
+
+    await RabbitMQ.consume(QUEUES.PAYMENT_QUEUE, async (msg) => {
+      switch (msg.type) {
+        case ROUTING_KEYS.USER_WALLET_CREATE:
+          await userWalletService.createWalletForUser(msg.data);
+          break;
+        case ROUTING_KEYS.USER_ADDED_REWARD_AMOUNT:
+          await userWalletService.getUserWalletBalanceAndTransactions(msg.data);
+          break;
+        default:
+          console.warn('Unknown payment message:', msg.type);
+      }
     });
   }
 }

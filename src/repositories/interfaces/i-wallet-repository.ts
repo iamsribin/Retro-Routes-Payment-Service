@@ -2,7 +2,7 @@ import { Wallet } from '@/models/wallet.entity';
 import { QueryRunner } from 'typeorm';
 
 export interface IWalletRepository {
-  createIfNotExists(userId: string, currency: string);
+  createIfNotExists(userId: string, currency?: string);
   getUserWalletBalanceAndTransactions(
     userId: string,
     currency: string
