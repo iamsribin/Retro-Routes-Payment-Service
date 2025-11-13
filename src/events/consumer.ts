@@ -1,10 +1,9 @@
-import { Wallet } from "@/models/wallet.entity";
-import { WalletRepository } from "@/repositories/implementation/wallet.repository";
-import { UserWalletService } from "@/services/implementation/user-wallet-service";
+import { container } from "@/config/inversify.config";
+import { IUserWalletService } from "@/services/interface/i-user-waller-service";
+import { TYPES } from "@/types/inversify-types";
 import { EXCHANGES, QUEUES, RabbitMQ, ROUTING_KEYS } from "@Pick2Me/shared";
 
-const walletRepository = new WalletRepository(Wallet);
-const userWalletService = new UserWalletService(walletRepository)
+const userWalletService = container.get<IUserWalletService>(TYPES.UserWalletService)
 export class UserEventConsumer{
   static async init() {
     await RabbitMQ.setupExchange(EXCHANGES.USER);

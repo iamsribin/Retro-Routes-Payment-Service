@@ -1,5 +1,5 @@
 import { Repository, QueryRunner } from 'typeorm';
-import { Wallet } from '../../models/wallet.entity';
+import { Wallet } from '@/models/wallet.entity';
 import { WalletTransaction } from '../../models/wallet-transaction.entity';
 import { SqlBaseRepository } from '@Pick2Me/shared';
 import { AppDataSource } from '@/config/sql-db';
