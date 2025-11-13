@@ -1,12 +1,12 @@
 
 export const TYPES = {
   PaymentController: Symbol.for('PaymentController'),
-  PaymentService: Symbol.for('PaymentService'),
   GrpcPaymentController:Symbol.for("GrpcPaymentController"),
-  GrpcPaymentService:Symbol.for("GrpcPaymentService"),
 
-  WalletService: Symbol.for('WalletService'),
-  WalletController: Symbol.for('WalletController'),
+  PaymentService: Symbol.for('PaymentService'),
+  DriverWalletService: Symbol.for('DriverWalletService'),
+  StripeService: Symbol.for('StripeService'),
+  UserWalletService: Symbol.for('UserWalletService'),
+
   WalletRepository: Symbol.for('WalletRepository'),
-  PaymentRepository: Symbol.for('PaymentRepository')
 }

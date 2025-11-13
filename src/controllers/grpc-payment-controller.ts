@@ -1,11 +1,12 @@
 import { sendUnaryData, ServerUnaryCall } from "@grpc/grpc-js";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/types/inversify-types";
-import { IGrpcPaymentService } from "@/services/interface/i-grpc-payment-service";
+import { IPaymentService } from "@/services/interface/i-payment-service";
+import { IDriverWalletService } from "@/services/interface/i-driver-wallet-service";
 
 @injectable()
 export class GrpcPaymentController {
-  constructor(@inject(TYPES.GrpcPaymentService) private _grpcPaymentService:IGrpcPaymentService){}
+  constructor(@inject(TYPES.DriverWalletService) private _driverWalletService:IDriverWalletService){}
 
   createDriverConnectAccount = async (
     call: ServerUnaryCall<
@@ -17,7 +18,7 @@ export class GrpcPaymentController {
     try {
       const { driverId, email } = call.request;
 
-      const accountData = await this._grpcPaymentService.createDriverConnectAccount( email,driverId );
+      const accountData = await this._driverWalletService.createDriverConnectAccount( email,driverId );
 
       callback(null, accountData);
     } catch (err) {

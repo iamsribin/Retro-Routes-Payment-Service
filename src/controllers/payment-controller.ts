@@ -5,11 +5,14 @@ import { PaymentReq } from "../types/request";
 import { IncomingHttpHeaders } from "http";
 import { IStripeService } from "../services/interface/i-stripe-service";
 import { InternalError, IResponse } from "@Pick2Me/shared";
+import { inject, injectable } from "inversify";
+import { TYPES } from "@/types/inversify-types";
 
+@injectable()
 export class PaymentController {
   constructor(
-    private _paymentService: IPaymentService,
-    private _stripeService: IStripeService
+    @inject(TYPES.PaymentService) private _paymentService: IPaymentService,
+    @inject(TYPES.StripeService) private _stripeService: IStripeService
   ) {}
 
   async CreateCheckoutSession(

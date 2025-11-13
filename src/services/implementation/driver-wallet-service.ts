@@ -1,8 +1,11 @@
-import { stripe } from "../../config/stripe";
+import { stripe } from "@/config/stripe";
+import { IDriverWalletService } from "../interface/i-driver-wallet-service";
+import { injectable } from "inversify";
 
-export default class WalletService {
+@injectable()
+export default class DriverWalletService implements IDriverWalletService {
 
-  async createDriverConnectAccount(email: string, driverId: string) {
+  async createDriverConnectAccount(email: string, driverId: string): Promise<{ accountId: string; accountLinkUrl: string }> {
     try {
       const account = stripe.accounts.create({
         type: "express",
@@ -30,7 +33,7 @@ export default class WalletService {
 
       return { accountId: account_id, accountLinkUrl: accountLink.url };
     } catch (error) {
-      console.log(error);
+      throw new Error("Stripe account creation failed");
     }
   }
 }

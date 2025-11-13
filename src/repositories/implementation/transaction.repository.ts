@@ -1,8 +1,8 @@
-import { TransactionRepository } from '../repository';
-import { ITransaction } from '../../models/transaction.modal';
-import { TransactionModel } from '../../models/transaction.modal';
+import { ITransaction } from '@/models/transaction.modal';
+import { TransactionModel } from '@/models/transaction.modal';
+import { ITransactionRepository } from '../interfaces/repository';
 
-export default class TransactionRepositoryImpl extends TransactionRepository {
+export default class TransactionRepositoryImpl implements ITransactionRepository {
   async create(transaction: Partial<ITransaction>): Promise<ITransaction> {
     return await TransactionModel.create(transaction);
   }
