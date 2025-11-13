@@ -10,5 +10,5 @@ export interface RedisDriverDetails {
   driverPhoto: string;
   phoneNumber: string;
   stripeId: string;
-  stripeLinkUrl:string;
+  stripeLinkUrl: string;
 }

@@ -1,6 +1,6 @@
 import Stripe from 'stripe';
 
-const stripeKey = process.env.STRIPE_SECRET_KEY 
+const stripeKey = process.env.STRIPE_SECRET_KEY;
 if (!stripeKey) {
   throw new Error('Missing STRIPE_SECRET_KEY env var — set it in .env or your environment.');
 }

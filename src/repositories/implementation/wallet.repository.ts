@@ -4,13 +4,30 @@ import { WalletTransaction } from '../../models/wallet-transaction.entity';
 import { SqlBaseRepository } from '@Pick2Me/shared';
 import { AppDataSource } from '@/config/sql-db';
 import { IWalletRepository } from '../interfaces/i-wallet-repository';
+import { inject, injectable } from 'inversify';
+import { TYPES } from '@/types/inversify-types';
 
-export class WalletRepository extends SqlBaseRepository<Wallet>  implements IWalletRepository{
+@injectable()
+export class WalletRepository extends SqlBaseRepository<Wallet> implements IWalletRepository {
   private txRepo: Repository<WalletTransaction>;
 
-  constructor(walletRepo: Repository<Wallet>) {
-    super(Wallet,AppDataSource);
+  constructor(@inject(TYPES.WalletRepositoryToken) walletRepo: Repository<Wallet>) {
+    super(Wallet, AppDataSource);
     this.txRepo = walletRepo.manager.getRepository(WalletTransaction);
+  }
+
+  // create wallet if not exists
+  async createIfNotExists(userId: string, currency = 'INR') {
+    try {
+      const existing = await this.findOne({
+        userId: userId as any,
+        currency: currency as any,
+      });
+      if (existing) return existing;
+      return await this.create({ userId, currency } as any);
+    } catch (error) {
+      throw error;
+    }
   }
 
   // helper to get a query runner
@@ -19,21 +36,21 @@ export class WalletRepository extends SqlBaseRepository<Wallet>  implements IWal
   }
 
   // get wallet and lock it for update in the provided queryRunner
-  async getForUpdate(queryRunner: QueryRunner, userId: string, currency = 'INR'): Promise<Wallet | null> {
+  async getForUpdate(
+    queryRunner: QueryRunner,
+    userId: string,
+    currency = 'INR'
+  ): Promise<Wallet | null> {
     const wallet = await queryRunner.manager
       .createQueryBuilder(Wallet, 'w')
       .useTransaction(true)
       .setLock('pessimistic_write')
-      .where('w.userId = :userId AND w.currency = :currency', { userId, currency })
+      .where('w.userId = :userId AND w.currency = :currency', {
+        userId,
+        currency,
+      })
       .getOne();
     return wallet ?? null;
-  }
-
-  // create wallet if not exists 
-  async createIfNotExists(userId: string, currency = 'INR') {
-    const existing = await this.findOne({ userId: userId as any, currency: currency as any });
-    if (existing) return existing;
-    return await this.create({ userId, currency } as any);
   }
 
   // transactional hot-path: apply transaction (credit/debit), with idempotency check
@@ -51,8 +68,17 @@ export class WalletRepository extends SqlBaseRepository<Wallet>  implements IWal
     metadata?: any;
   }) {
     const {
-      queryRunner, userId, currency = 'INR', amount, direction, reason, referenceType,
-      referenceId, idempotencyKey, traceId, metadata,
+      queryRunner,
+      userId,
+      currency = 'INR',
+      amount,
+      direction,
+      reason,
+      referenceType,
+      referenceId,
+      idempotencyKey,
+      traceId,
+      metadata,
     } = params;
 
     // lock the wallet
@@ -80,7 +106,7 @@ export class WalletRepository extends SqlBaseRepository<Wallet>  implements IWal
     const amt = BigInt(amount);
 
     let newBalance = currentBalance;
-    let newReserved = currentReserved;
+    const newReserved = currentReserved;
 
     if (direction === 'credit') {
       newBalance = currentBalance + amt;
@@ -94,7 +120,9 @@ export class WalletRepository extends SqlBaseRepository<Wallet>  implements IWal
     }
 
     // update wallet
-    await queryRunner.manager.update(Wallet, { id: wallet.id } as any, { balance: newBalance });
+    await queryRunner.manager.update(Wallet, { id: wallet.id } as any, {
+      balance: newBalance,
+    });
 
     // insert ledger row
     const txEntity = queryRunner.manager.create(WalletTransaction, {
@@ -138,7 +166,10 @@ export class WalletRepository extends SqlBaseRepository<Wallet>  implements IWal
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      const res = await this.applyTransactionTransactional({ ...params, queryRunner });
+      const res = await this.applyTransactionTransactional({
+        ...params,
+        queryRunner,
+      });
       await queryRunner.commitTransaction();
       return res;
     } catch (err) {
@@ -148,5 +179,4 @@ export class WalletRepository extends SqlBaseRepository<Wallet>  implements IWal
       await queryRunner.release();
     }
   }
-
 }

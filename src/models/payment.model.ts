@@ -17,8 +17,16 @@ const PaymentSchema = new Schema<PaymentDoc>(
     userId: { type: String, required: true },
     driverId: { type: String, required: true },
     amount: { type: Number, required: true },
-    paymentMode: { type: String, enum: ['stripe', 'wallet', 'cash'], required: true },
-    paymentStatus: { type: String, enum: ['pending', 'completed', 'failed'], default: 'pending' },
+    paymentMode: {
+      type: String,
+      enum: ['stripe', 'wallet', 'cash'],
+      required: true,
+    },
+    paymentStatus: {
+      type: String,
+      enum: ['pending', 'completed', 'failed'],
+      default: 'pending',
+    },
     stripePaymentIntentId: String,
   },
   { timestamps: true }

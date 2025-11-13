@@ -1,7 +1,7 @@
-import fp from "fastify-plugin";
-import { FastifyPluginAsync } from "fastify";
-import jwt from "jsonwebtoken";
-import { AccessPayload, IRole, StatusCode } from "@Pick2Me/shared"; 
+import fp from 'fastify-plugin';
+import { FastifyPluginAsync } from 'fastify';
+import jwt from 'jsonwebtoken';
+import { AccessPayload, IRole, StatusCode } from '@Pick2Me/shared';
 
 export interface VerifyOpts {
   strict?: boolean;
@@ -10,31 +10,38 @@ export interface VerifyOpts {
 }
 
 const verifyGatewayJwtPlugin: FastifyPluginAsync = async (fastify, opts) => {
-    
-  function makePreHandler(strict = true, GATEWAY_SECRET = "", options?: { role?: IRole | IRole[] }) {
+  function makePreHandler(
+    strict = true,
+    GATEWAY_SECRET = '',
+    options?: { role?: IRole | IRole[] }
+  ) {
     return async (request: any, reply: any) => {
-      const raw = (request.headers["x-gateway-jwt"] as string | undefined) ?? null;
-      console.log("raw",raw);
-      
+      const raw = (request.headers['x-gateway-jwt'] as string | undefined) ?? null;
+      console.log('raw', raw);
+
       if (!GATEWAY_SECRET) {
-        fastify.log.warn("GATEWAY_SHARED_SECRET is not set. Gateway JWT verification may fail.");
+        fastify.log.warn('GATEWAY_SHARED_SECRET is not set. Gateway JWT verification may fail.');
       }
 
       if (!raw) {
         if (strict) {
-          reply.status(StatusCode.Unauthorized).json({ message: "Missing gateway token" });
+          reply.status(StatusCode.Unauthorized).json({ message: 'Missing gateway token' });
           return;
         }
         request.gatewayUser = null;
         return;
-      } 
+      }
 
       try {
-        const decoded = jwt.verify(raw, GATEWAY_SECRET as string, { issuer: "api-gateway" }) as AccessPayload;
+        const decoded = jwt.verify(raw, GATEWAY_SECRET as string, {
+          issuer: 'api-gateway',
+        }) as AccessPayload;
 
-        if (!decoded || typeof decoded !== "object" || !decoded.id || !decoded.role) {
+        if (!decoded || typeof decoded !== 'object' || !decoded.id || !decoded.role) {
           if (strict) {
-            reply.status(StatusCode.Unauthorized).json({ message: "Invalid gateway token (claims missing)" });
+            reply
+              .status(StatusCode.Unauthorized)
+              .json({ message: 'Invalid gateway token (claims missing)' });
             return;
           }
           request.gatewayUser = null;
@@ -50,7 +57,7 @@ const verifyGatewayJwtPlugin: FastifyPluginAsync = async (fastify, opts) => {
           const required = Array.isArray(options.role) ? options.role : [options.role];
           if (!required.includes(gatewayUser.role)) {
             if (strict) {
-              reply.status(StatusCode.Forbidden).json({ message: "Forbidden: role mismatch" });
+              reply.status(StatusCode.Forbidden).json({ message: 'Forbidden: role mismatch' });
               return;
             }
             request.gatewayUser = null;
@@ -60,9 +67,11 @@ const verifyGatewayJwtPlugin: FastifyPluginAsync = async (fastify, opts) => {
 
         request.gatewayUser = gatewayUser;
       } catch (err: any) {
-        const message = err?.message || "Invalid gateway token";
+        const message = err?.message || 'Invalid gateway token';
         if (strict) {
-          reply.status(StatusCode.Unauthorized).json({ message: `Invalid gateway token: ${message}` });
+          reply
+            .status(StatusCode.Unauthorized)
+            .json({ message: `Invalid gateway token: ${message}` });
           return;
         }
         request.gatewayUser = null;
@@ -70,9 +79,9 @@ const verifyGatewayJwtPlugin: FastifyPluginAsync = async (fastify, opts) => {
     };
   }
 
-  fastify.decorate("verifyGatewayJwt", makePreHandler);
+  fastify.decorate('verifyGatewayJwt', makePreHandler);
 };
 
 export default fp(verifyGatewayJwtPlugin, {
-  name: "verifyGatewayJwtPlugin",
+  name: 'verifyGatewayJwtPlugin',
 });

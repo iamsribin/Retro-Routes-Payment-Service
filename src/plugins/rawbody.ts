@@ -7,10 +7,10 @@ export default fp(async (fastify) => {
     function (_req, body, done) {
       try {
         done(null, body);
-      } catch (error:any) {
+      } catch (error: any) {
         error.statusCode = 400;
         done(error, undefined);
       }
-    },
+    }
   );
 });

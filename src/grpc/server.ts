@@ -13,7 +13,7 @@ if (!paymentServiceDescriptor) {
 const grpcPaymentController = container.get<GrpcPaymentController>(TYPES.GrpcPaymentController);
 
 const handlers = createPaymentHandlers({
-  grpcPaymentController
+  grpcPaymentController,
 });
 
 export const startGrpcServer = () => {
@@ -23,15 +23,17 @@ export const startGrpcServer = () => {
     // Register payment service gRPC functions
     server.addService(paymentServiceDescriptor, handlers);
 
-    // Bind server 
+    // Bind server
     server.bindAsync(
       process.env.PAYMENT_GRPC_HOST as string,
       grpc.ServerCredentials.createInsecure(),
       () => {
-        console.log(`GRPC server for user service running on port ${process.env.PAYMENT_GRPC_HOST}`);
+        console.log(
+          `GRPC server for user service running on port ${process.env.PAYMENT_GRPC_HOST}`
+        );
       }
     );
-  } catch (err) {  
+  } catch (err) {
     console.log(err);
   }
 };

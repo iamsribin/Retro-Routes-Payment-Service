@@ -1,7 +1,7 @@
-import "fastify";
-import { AccessPayload, IRole } from "@Pick2Me/shared";
+import 'fastify';
+import { AccessPayload, IRole } from '@Pick2Me/shared';
 
-declare module "fastify" {
+declare module 'fastify' {
   interface FastifyInstance {
     verifyGatewayJwt: (
       strict?: boolean,
@@ -14,4 +14,3 @@ declare module "fastify" {
     gatewayUser?: AccessPayload | null;
   }
 }
-  

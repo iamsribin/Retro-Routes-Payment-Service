@@ -1,7 +1,6 @@
-
 export const TYPES = {
   PaymentController: Symbol.for('PaymentController'),
-  GrpcPaymentController:Symbol.for("GrpcPaymentController"),
+  GrpcPaymentController: Symbol.for('GrpcPaymentController'),
 
   PaymentService: Symbol.for('PaymentService'),
   DriverWalletService: Symbol.for('DriverWalletService'),
@@ -9,4 +8,6 @@ export const TYPES = {
   UserWalletService: Symbol.for('UserWalletService'),
 
   WalletRepository: Symbol.for('WalletRepository'),
-}
+  TransactionRepository: Symbol.for('TransactionRepository'),
+  WalletRepositoryToken: Symbol.for('WalletRepositoryToken'),
+};

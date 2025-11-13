@@ -1,11 +1,10 @@
-import { bookingClient, driverClient } from "../connection";
-
+import { bookingClient, driverClient } from '../connection';
 
 export async function markBookingAsPaid(bookingId: string, paymentId: string) {
   return new Promise<any>((resolve, reject) => {
     bookingClient.MarkAsPaid({ bookingId, paymentId }, (err: Error | null, response: any) => {
       if (err) return reject(err);
-      if (response.status !== "success") return reject(new Error("Failed to update booking"));
+      if (response.status !== 'success') return reject(new Error('Failed to update booking'));
       resolve(response);
     });
   });
@@ -20,7 +19,6 @@ export async function rollbackBooking(bookingId: string) {
   });
 }
 
-
 export async function addDriverEarnings(
   driverId: string,
   adminShare: number,
@@ -33,9 +31,9 @@ export async function addDriverEarnings(
       { driverId, adminShare, driverShare, transactionId },
       async (err: Error | null, response: any) => {
         if (err) return reject(err);
-        if (response.status !== "success") {
+        if (response.status !== 'success') {
           await rollbackBooking(bookingId);
-          return reject(new Error("Failed to update driver"));
+          return reject(new Error('Failed to update driver'));
         }
         resolve(response);
       }
@@ -43,20 +41,14 @@ export async function addDriverEarnings(
   });
 }
 
-
-export async function getDriverStripeFromDriverService(
-  driverId: string,
-) {
+export async function getDriverStripeFromDriverService(driverId: string) {
   return new Promise<any>(async (resolve, reject) => {
-    driverClient.getDriverStripe(
-      { driverId},
-      async (err: Error | null, response: any) => {
-        if (err) return reject(err);
-        if (response.status !== "success") {
-          return reject(new Error("Failed to update driver"));
-        }
-        resolve(response);
+    driverClient.getDriverStripe({ driverId }, async (err: Error | null, response: any) => {
+      if (err) return reject(err);
+      if (response.status !== 'success') {
+        return reject(new Error('Failed to update driver'));
       }
-    );
+      resolve(response);
+    });
   });
 }

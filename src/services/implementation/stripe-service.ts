@@ -1,27 +1,31 @@
-import { ITransactionRepository } from "../../interfaces/repository.interface";
-import { ITransaction } from "../../models/transaction.modal";
-import { stripe } from "../../config/stripe";
-import { RabbitMQPublisher } from "../../events/publisher";
-import { randomUUID } from "crypto";
-import { StripeCheckoutSessionRes } from "../../types/response";
-import { PaymentReq } from "../../types/request";
-import { IncomingHttpHeaders } from "http";
-import Stripe from "stripe";
-import { IStripeService } from "../interface/i-stripe-service";
+import { ITransaction } from '../../models/transaction.modal';
+import { stripe } from '../../config/stripe';
+import { RabbitMQPublisher } from '../../events/publisher';
+import { randomUUID } from 'crypto';
+import { StripeCheckoutSessionRes } from '../../types/response';
+import { PaymentReq } from '../../types/request';
+import { IncomingHttpHeaders } from 'http';
+import Stripe from 'stripe';
+import { IStripeService } from '../interface/i-stripe-service';
 import {
   addDriverEarnings,
   getDriverStripeFromDriverService,
   markBookingAsPaid,
-} from "../../grpc/clients/booking-client";
-import { ConformCashPaymentDto } from "../../dto/paymentRes.dto";
-import { getRedisService, StatusCode } from "@Pick2Me/shared";
+} from '../../grpc/clients/booking-client';
+import { ConformCashPaymentDto } from '../../dto/paymentRes.dto';
+import { getRedisService, StatusCode } from '@Pick2Me/shared';
+import { inject, injectable } from 'inversify';
+import { TYPES } from '@/types/inversify-types';
+import { ITransactionRepository } from '@/repositories/interfaces/repository';
 
+@injectable()
 export class StripeService implements IStripeService {
-  constructor(private _transactionRepository: ITransactionRepository) {}
+  constructor(
+    @inject(TYPES.TransactionRepository)
+    private _transactionRepository: ITransactionRepository
+  ) {}
 
-  async createCheckoutSession(
-    data: PaymentReq
-  ): Promise<StripeCheckoutSessionRes> {
+  async createCheckoutSession(data: PaymentReq): Promise<StripeCheckoutSessionRes> {
     try {
       // basic validation
       if (
@@ -34,7 +38,7 @@ export class StripeService implements IStripeService {
       ) {
         return {
           status: StatusCode.BadRequest,
-          message: "Invalid payment request",
+          message: 'Invalid payment request',
         };
       }
 
@@ -46,17 +50,17 @@ export class StripeService implements IStripeService {
       const driverShareCents = cents - platformFeeCents;
 
       //Redis cache
-      const redisRepo = getRedisService()
-      let driverDetails = await redisRepo.getDriverDetails(data.driverId, true) as any;
+      const redisRepo = getRedisService();
+      let driverDetails = (await redisRepo.getDriverDetails(data.driverId, true)) as any;
 
-      console.log("driverDetails redis", driverDetails);
+      console.log('driverDetails redis', driverDetails);
 
       if (!driverDetails) {
         // fallback: call driver service via gRPC
         try {
           driverDetails = await getDriverStripeFromDriverService(data.driverId);
         } catch (err: any) {
-          console.warn("Failed to fetch driver from driver service", {
+          console.warn('Failed to fetch driver from driver service', {
             driverId: data.driverId,
             err: err?.message ?? err,
           });
@@ -66,7 +70,7 @@ export class StripeService implements IStripeService {
       if (!driverDetails?.stripeId) {
         return {
           status: StatusCode.BadRequest,
-          message: "Driver not onboarded for Stripe payouts",
+          message: 'Driver not onboarded for Stripe payouts',
         };
       }
 
@@ -75,23 +79,23 @@ export class StripeService implements IStripeService {
         const acct = await stripe.accounts.retrieve(driverDetails.stripeId);
 
         if (!acct || !acct.charges_enabled) {
-          console.warn("Driver stripe account not ready", {
+          console.warn('Driver stripe account not ready', {
             driverId: data.driverId,
             stripeId: driverDetails.stripeId,
           });
           return {
             status: StatusCode.BadRequest,
-            message: "Driver Stripe account not ready",
+            message: 'Driver Stripe account not ready',
           };
         }
       } catch (err: any) {
-        console.error("Failed to validate driver stripe account", {
+        console.error('Failed to validate driver stripe account', {
           stripeId: driverDetails.stripeId,
           err: err?.message ?? err,
         });
         return {
           status: StatusCode.InternalServerError,
-          message: "Failed to validate driver Stripe account",
+          message: 'Failed to validate driver Stripe account',
         };
       }
 
@@ -102,37 +106,34 @@ export class StripeService implements IStripeService {
 
       if (transaction) {
         switch (transaction.status) {
-          case "completed":
+          case 'completed':
             return {
               status: StatusCode.Conflict,
-              message: "Payment already processed",
+              message: 'Payment already processed',
             };
-          case "pending":
+          case 'pending':
             if (transaction.stripeSessionId)
               return {
                 status: StatusCode.Conflict,
-                message: "Payment already in progress",
+                message: 'Payment already in progress',
                 sessionId: transaction.stripeSessionId,
               };
             return {
               status: StatusCode.Conflict,
-              message: "Payment already in progress",
+              message: 'Payment already in progress',
             };
-          case "failed":
-            await this._transactionRepository.update(
-              transaction.transactionId,
-              {
-                status: "pending",
-                amount: data.amount,
-                adminShare: platformFeeCents,
-                driverShare: driverShareCents,
-              }
-            );
+          case 'failed':
+            await this._transactionRepository.update(transaction.transactionId, {
+              status: 'pending',
+              amount: data.amount,
+              adminShare: platformFeeCents,
+              driverShare: driverShareCents,
+            });
             break;
           default:
             return {
               status: StatusCode.InternalServerError,
-              message: "Invalid transaction state",
+              message: 'Invalid transaction state',
             };
         }
       } else {
@@ -142,8 +143,8 @@ export class StripeService implements IStripeService {
           driverId: data.driverId,
           transactionId: randomUUID(),
           amount: data.amount,
-          paymentMethod: "stripe",
-          status: "pending",
+          paymentMethod: 'stripe',
+          status: 'pending',
           adminShare: platformFeeCents,
           driverShare: driverShareCents,
           idempotencyKey,
@@ -152,18 +153,18 @@ export class StripeService implements IStripeService {
 
       // create Checkout Session with destination + application_fee_amount
       const session = await stripe.checkout.sessions.create({
-        payment_method_types: ["card"],
+        payment_method_types: ['card'],
         line_items: [
           {
             price_data: {
-              currency: "usd",
-              product_data: { name: "Ride Payment" },
+              currency: 'usd',
+              product_data: { name: 'Ride Payment' },
               unit_amount: cents,
             },
             quantity: 1,
           },
         ],
-        mode: "payment",
+        mode: 'payment',
         payment_intent_data: {
           application_fee_amount: platformFeeCents,
           transfer_data: { destination: driverDetails.stripeId },
@@ -186,7 +187,7 @@ export class StripeService implements IStripeService {
 
       return {
         status: StatusCode.OK,
-        message: "Checkout session created",
+        message: 'Checkout session created',
         sessionId: session.id,
       };
     } catch (err: any) {
@@ -196,17 +197,17 @@ export class StripeService implements IStripeService {
         if (data?.bookingId) {
           await this._transactionRepository.updateStatusByKey(
             `booking_${data.bookingId}`,
-            "failed"
+            'failed'
           );
         }
       } catch (upErr) {
-        console.error("Failed to update transaction status after stripe error", {
+        console.error('Failed to update transaction status after stripe error', {
           error: upErr,
         });
       }
       return {
         status: StatusCode.InternalServerError,
-        message: err?.message ?? "Failed to create checkout session",
+        message: err?.message ?? 'Failed to create checkout session',
       };
     }
   }
@@ -215,42 +216,31 @@ export class StripeService implements IStripeService {
     rawBody: Buffer,
     headers: IncomingHttpHeaders
   ): Promise<ConformCashPaymentDto> {
-    const sig = (headers["stripe-signature"] as string) || "";
+    const sig = (headers['stripe-signature'] as string) || '';
     const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
     if (!sig || !webhookSecret) {
-      throw new Error("Missing stripe signature or webhook secret");
+      throw new Error('Missing stripe signature or webhook secret');
     }
 
     let event: Stripe.Event;
     try {
       event = stripe.webhooks.constructEvent(rawBody, sig, webhookSecret);
     } catch (err: any) {
-      const e = new Error(
-        `Invalid stripe signature: ${err?.message ?? "unknown"}`
-      );
+      const e = new Error(`Invalid stripe signature: ${err?.message ?? 'unknown'}`);
       throw e;
     }
 
     const session = event.data.object as Stripe.Checkout.Session;
     const paymentIntentId = session.payment_intent;
-    const paymentIntent = await stripe.paymentIntents.retrieve(
-      paymentIntentId as string
-    );
+    const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId as string);
 
-    const {
-      bookingId,
-      userId,
-      driverId,
-      localTransactionId,
-      adminShare,
-      driverShare,
-    } = session.metadata || {};
+    const { bookingId, userId, driverId, localTransactionId, adminShare, driverShare } =
+      session.metadata || {};
 
-    if (paymentIntent.status === "succeeded") {
-
+    if (paymentIntent.status === 'succeeded') {
       await this._transactionRepository.update(localTransactionId, {
-        status: "completed",
+        status: 'completed',
         updatedAt: new Date(),
       });
 
@@ -270,19 +260,18 @@ export class StripeService implements IStripeService {
         amount: Number(adminShare) + Number(driverShare),
       };
 
-      RabbitMQPublisher.publish("payment.completed", data);
+      RabbitMQPublisher.publish('payment.completed', data);
 
       return {
         status: StatusCode.OK,
-        message: "Cash payment confirmed successfully",
+        message: 'Cash payment confirmed successfully',
       };
-
     } else {
       await this._transactionRepository.update(localTransactionId, {
-        status: "failed",
+        status: 'failed',
         updatedAt: new Date(),
       });
-      throw new Error("Something went wrong");
+      throw new Error('Something went wrong');
     }
   }
 }

@@ -1,13 +1,19 @@
-import { ITransactionRepository } from "@/interfaces/repository.interface";
-import { ConformCashPaymentDto } from "@/dto/paymentRes.dto";
-import { RabbitMQPublisher } from "@/events/publisher";
-import { randomUUID } from "crypto";
-import { IPaymentService } from "../interface/i-payment-service";
-import { addDriverEarnings, markBookingAsPaid } from "@/grpc/clients/booking-client";
-import { StatusCode } from "@Pick2Me/shared";
+import { ConformCashPaymentDto } from '@/dto/paymentRes.dto';
+import { RabbitMQPublisher } from '@/events/publisher';
+import { randomUUID } from 'crypto';
+import { IPaymentService } from '../interface/i-payment-service';
+import { addDriverEarnings, markBookingAsPaid } from '@/grpc/clients/booking-client';
+import { StatusCode } from '@Pick2Me/shared';
+import { ITransactionRepository } from '@/repositories/interfaces/repository';
+import { inject, injectable } from 'node_modules/inversify/lib/cjs';
+import { TYPES } from '@/types/inversify-types';
 
+@injectable()
 export class PaymentService implements IPaymentService {
-  constructor(private _transactionRepository: ITransactionRepository) {}
+  constructor(
+    @inject(TYPES.TransactionRepository)
+    private _transactionRepository: ITransactionRepository
+  ) {}
 
   async ConfirmCashPayment(data: {
     bookingId: string;
@@ -23,15 +29,15 @@ export class PaymentService implements IPaymentService {
 
       if (existingTransaction) {
         switch (existingTransaction.status) {
-          case "completed":
+          case 'completed':
             return {
               status: StatusCode.Conflict,
-              message: "Payment already processed",
+              message: 'Payment already processed',
             };
-          case "pending":
-            throw new Error("Payment already in progress");
-          case "failed":
-            existingTransaction.status = "pending";
+          case 'pending':
+            throw new Error('Payment already in progress');
+          case 'failed':
+            existingTransaction.status = 'pending';
             existingTransaction.amount = data.amount;
             existingTransaction.adminShare = Math.round(data.amount * 0.2);
             existingTransaction.driverShare = Math.round(data.amount * 0.8);
@@ -39,7 +45,7 @@ export class PaymentService implements IPaymentService {
             transaction = existingTransaction;
             break;
           default:
-            throw new Error("Invalid transaction state");
+            throw new Error('Invalid transaction state');
         }
       } else {
         transaction = await this._transactionRepository.create({
@@ -48,8 +54,8 @@ export class PaymentService implements IPaymentService {
           transactionId: randomUUID(),
           driverId: data.driverId,
           amount: data.amount,
-          paymentMethod: "cash",
-          status: "pending",
+          paymentMethod: 'cash',
+          status: 'pending',
           adminShare: Math.round(data.amount * 0.2),
           driverShare: Math.round(data.amount * 0.8),
           idempotencyKey,
@@ -65,25 +71,18 @@ export class PaymentService implements IPaymentService {
         data.bookingId
       );
 
-      await this._transactionRepository.updateStatusByKey(
-        idempotencyKey,
-        "completed"
-      );
-      RabbitMQPublisher.publish("payment.completed", data);
+      await this._transactionRepository.updateStatusByKey(idempotencyKey, 'completed');
+      RabbitMQPublisher.publish('payment.completed', data);
 
       return {
         status: StatusCode.OK,
-        message: "Cash payment confirmed successfully",
+        message: 'Cash payment confirmed successfully',
       };
     } catch (error: any) {
-      await this._transactionRepository.updateStatusByKey(
-        `booking_${data.bookingId}`,
-        "failed"
-      );
+      await this._transactionRepository.updateStatusByKey(`booking_${data.bookingId}`, 'failed');
       return {
         status: StatusCode.InternalServerError,
-        message:
-          error.message || "Something went wrong during cash confirmation",
+        message: error.message || 'Something went wrong during cash confirmation',
       };
     }
   }

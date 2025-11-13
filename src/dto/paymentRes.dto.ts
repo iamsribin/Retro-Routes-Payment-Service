@@ -1,7 +1,6 @@
-import { StatusCode } from "@Pick2Me/shared";
+import { StatusCode } from '@Pick2Me/shared';
 
-
-export interface ConformCashPaymentDto{
-    status: StatusCode,
-    message: string
+export interface ConformCashPaymentDto {
+  status: StatusCode;
+  message: string;
 }

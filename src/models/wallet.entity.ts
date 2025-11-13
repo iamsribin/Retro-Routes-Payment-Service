@@ -1,5 +1,10 @@
 import {
-  Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, Index
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  Index,
 } from 'typeorm';
 import { BigIntTransformer } from '../utils/bigint.transformer';
 
@@ -16,13 +21,13 @@ export class Wallet {
   currency!: string;
 
   @Column({ type: 'bigint', default: '0', transformer: BigIntTransformer })
-  balance!: bigint;
+  balance: bigint = 0n;
 
   @Column({ type: 'bigint', default: '0', transformer: BigIntTransformer })
-  reserved!: bigint;
+  reserved: bigint = 0n;
 
   @Column({ type: 'text', default: 'active' })
-  status!: string;
+  status: string = 'active';
 
   @CreateDateColumn({ type: 'timestamptz' })
   createdAt!: Date;

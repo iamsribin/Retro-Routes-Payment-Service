@@ -1,8 +1,8 @@
-import Fastify from "fastify";
-import cookie from "fastify-cookie";
-import errorHandlerPlugin from "@/plugins/errorHandler.plugin";
-import walletRoutes from "@/routes/wallet-routes";
-import verifyGatewayJwtPlugin from "@/plugins/verifyGatewayJwt.plugin";
+import Fastify from 'fastify';
+import cookie from 'fastify-cookie';
+import errorHandlerPlugin from '@/plugins/errorHandler.plugin';
+import walletRoutes from '@/routes/wallet-routes';
+import verifyGatewayJwtPlugin from '@/plugins/verifyGatewayJwt.plugin';
 
 const app = Fastify({
   logger: {
@@ -22,8 +22,8 @@ app.register(cookie);
 
 app.register(verifyGatewayJwtPlugin);
 
-app.register(walletRoutes, { prefix: "/" });
+app.register(walletRoutes, { prefix: '/' });
 
-app.register(errorHandlerPlugin); 
+app.register(errorHandlerPlugin);
 
 export default app;

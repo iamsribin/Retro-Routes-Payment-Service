@@ -16,11 +16,16 @@ export default class TransactionRepositoryImpl implements ITransactionRepository
   }
 
   async update(transactionId: string, update: Partial<ITransaction>): Promise<ITransaction | null> {
-    return await TransactionModel.findOneAndUpdate({ transactionId }, update, { new: true });
+    return await TransactionModel.findOneAndUpdate({ transactionId }, update, {
+      new: true,
+    });
   }
 
   // --- New method 1 ---
-  async updateStatus(transactionId: string, status: 'pending' | 'completed' | 'failed'): Promise<ITransaction | null> {
+  async updateStatus(
+    transactionId: string,
+    status: 'pending' | 'completed' | 'failed'
+  ): Promise<ITransaction | null> {
     return await TransactionModel.findOneAndUpdate(
       { transactionId },
       { status, updatedAt: new Date() },
@@ -29,7 +34,10 @@ export default class TransactionRepositoryImpl implements ITransactionRepository
   }
 
   // --- New method 2 ---
-  async updateStatusByKey(idempotencyKey: string, status: 'pending' | 'completed' | 'failed'): Promise<ITransaction | null> {
+  async updateStatusByKey(
+    idempotencyKey: string,
+    status: 'pending' | 'completed' | 'failed'
+  ): Promise<ITransaction | null> {
     return await TransactionModel.findOneAndUpdate(
       { idempotencyKey },
       { status, updatedAt: new Date() },
