@@ -7,12 +7,21 @@ import { TYPES } from '@/types/inversify-types';
 export class UserWalletService implements IUserWalletService {
   constructor(@inject(TYPES.WalletRepository) private _walletRepository: WalletRepository) {}
 
-  async createWalletForUser(userId: string, currency: string = 'INR') {
+   createWalletForUser= async(userId: string, currency: string = 'INR'):Promise<void> =>{
     try {
       await this._walletRepository.createIfNotExists(userId, currency);
-      console.log('sucess');
+      console.log('wallet created successfully');
     } catch (error) {
-      console.log('errr', error);
+      throw error;
     }
+  }
+
+  getUserWalletBalanceAndTransactions = async(userId: string): Promise<{ balance: string; transactions: number }> =>{
+      try {
+         const response = await this._walletRepository.getUserWalletBalanceAndTransactions(userId, 'INR');
+         return { balance: response.balance.toString(), transactions: response.transactions };
+      } catch (error) {
+        throw error;
+      }
   }
 }

@@ -18,16 +18,24 @@ export class WalletRepository extends SqlBaseRepository<Wallet> implements IWall
 
   // create wallet if not exists
   async createIfNotExists(userId: string, currency = 'INR') {
-    try {
-      const existing = await this.findOne({
-        userId: userId as any,
-        currency: currency as any,
-      });
-      if (existing) return existing;
-      return await this.create({ userId, currency } as any);
-    } catch (error) {
-      throw error;
-    }
+    const existing = await this.findOne({
+      userId: userId,
+      currency: currency,
+    });
+    if (existing) return existing;
+    return await this.create({ userId, currency });
+  }
+
+  async getUserWalletBalanceAndTransactions(
+    userId: string,
+    currency = 'INR'
+  ): Promise<{ balance: bigint; transactions: number }> {
+    const wallet = await this.findOne({ userId, currency });
+    if (!wallet) throw new Error('WALLET_NOT_FOUND');
+    const transactionsCount = await this.txRepo.count({
+      where: { walletId: wallet.id },
+    });
+    return { balance: wallet.balance, transactions: transactionsCount };
   }
 
   // helper to get a query runner

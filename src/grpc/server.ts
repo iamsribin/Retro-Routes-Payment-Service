@@ -25,12 +25,10 @@ export const startGrpcServer = () => {
 
     // Bind server
     server.bindAsync(
-      process.env.PAYMENT_GRPC_HOST as string,
+      process.env.PAYMENT_GRPC_URL as string,
       grpc.ServerCredentials.createInsecure(),
       () => {
-        console.log(
-          `GRPC server for user service running on port ${process.env.PAYMENT_GRPC_HOST}`
-        );
+        console.log(`GRPC server for user service running on port ${process.env.PAYMENT_GRPC_URL}`);
       }
     );
   } catch (err) {

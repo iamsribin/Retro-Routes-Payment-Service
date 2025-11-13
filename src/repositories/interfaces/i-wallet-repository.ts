@@ -2,8 +2,13 @@ import { Wallet } from '@/models/wallet.entity';
 import { QueryRunner } from 'typeorm';
 
 export interface IWalletRepository {
-  getForUpdate(queryRunner: QueryRunner, userId: string, currency: string): Promise<Wallet | null>;
   createIfNotExists(userId: string, currency: string);
+  getUserWalletBalanceAndTransactions(
+    userId: string,
+    currency: string
+  ): Promise<{ balance: bigint; transactions: number }>;
+
+  getForUpdate(queryRunner: QueryRunner, userId: string, currency: string): Promise<Wallet | null>;
   applyTransactionTransactional(params: {
     queryRunner: QueryRunner;
     userId: string;

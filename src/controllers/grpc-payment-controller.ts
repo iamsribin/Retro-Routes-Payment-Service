@@ -1,14 +1,15 @@
 import { sendUnaryData, ServerUnaryCall } from '@grpc/grpc-js';
 import { inject, injectable } from 'inversify';
 import { TYPES } from '@/types/inversify-types';
-import { IPaymentService } from '@/services/interface/i-payment-service';
 import { IDriverWalletService } from '@/services/interface/i-driver-wallet-service';
+import { IUserWalletService } from '@/services/interface/i-user-waller-service';
 
 @injectable()
 export class GrpcPaymentController {
   constructor(
     @inject(TYPES.DriverWalletService)
-    private _driverWalletService: IDriverWalletService
+    private _driverWalletService: IDriverWalletService,
+    @inject(TYPES.UserWalletService) private _userWalletService: IUserWalletService
   ) {}
 
   createDriverConnectAccount = async (
@@ -30,6 +31,23 @@ export class GrpcPaymentController {
     } catch (err) {
       console.log(err);
       throw new Error('Stripe account creation failed');
+    }
+  };
+
+  getUserWalletBalanceAndTransactions = async (
+    call: ServerUnaryCall<{ userId: string }, { balance: bigint; transactions: number }>,
+    callback: sendUnaryData<{ balance: string; transactions: number }>
+  ): Promise<void> => {
+    try {
+      const response = await this._userWalletService.getUserWalletBalanceAndTransactions(
+        call.request.userId
+      );
+
+      callback(null, response);
+    } catch (error) {
+      console.log(error);
+
+      callback(error as Error, null);
     }
   };
 }
