@@ -1,4 +1,4 @@
-import { Wallet } from '@/models/wallet.entity';
+import { Wallet } from '@/interfaces/wallet.entity';
 import { QueryRunner } from 'typeorm';
 
 export interface IWalletRepository {
@@ -35,4 +35,5 @@ export interface IWalletRepository {
     traceId?: string;
     metadata?: any;
   });
+  addRewardAmountToUserWallet(userId: string, amount: number);
 }

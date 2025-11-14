@@ -1,6 +1,6 @@
 import { DataSource } from 'typeorm';
-import { Wallet } from '@/models/wallet.entity';
-import { WalletTransaction } from '@/models/wallet-transaction.entity';
+import { Wallet } from '@/interfaces/wallet.entity';
+import { WalletTransaction } from '@/interfaces/wallet-transaction.entity';
 import { Client } from 'pg';
 
 export const AppDataSource = new DataSource({

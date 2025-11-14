@@ -1,6 +1,6 @@
 import { Repository, QueryRunner } from 'typeorm';
-import { Wallet } from '@/models/wallet.entity';
-import { WalletTransaction } from '../../models/wallet-transaction.entity';
+import { Wallet } from '@/interfaces/wallet.entity';
+import { WalletTransaction } from '@/interfaces/wallet-transaction.entity';
 import { SqlBaseRepository } from '@Pick2Me/shared';
 import { AppDataSource } from '@/config/sql-db';
 import { IWalletRepository } from '../interfaces/i-wallet-repository';
@@ -36,6 +36,15 @@ export class WalletRepository extends SqlBaseRepository<Wallet> implements IWall
       where: { walletId: wallet.id },
     });
     return { balance: wallet.balance, transactions: transactionsCount };
+  }
+
+  addRewardAmountToUserWallet(userId: string, amount: number) {
+    this.applyTransaction({
+      userId,
+      amount: BigInt(amount),
+      direction: 'credit',
+      reason: 'Reward amount',
+    });
   }
 
   // helper to get a query runner

@@ -24,7 +24,7 @@ export class UserEventConsumer {
           await userWalletService.createWalletForUser(msg.data);
           break;
         case ROUTING_KEYS.USER_ADDED_REWARD_AMOUNT:
-          await userWalletService.getUserWalletBalanceAndTransactions(msg.data);
+          await userWalletService.addRewardAmountToUserWallet(msg.data);
           break;
         default:
           console.warn('Unknown payment message:', msg.type);

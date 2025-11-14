@@ -8,4 +8,6 @@ export interface IUserWalletService {
   getUserWalletBalanceAndTransactions(
     userId: string
   ): Promise<{ balance: string; transactions: number }>;
+
+  addRewardAmountToUserWallet(userId: string): Promise<void>;
 }
