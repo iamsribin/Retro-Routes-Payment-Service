@@ -1,4 +1,4 @@
-import { Wallet } from '@/interfaces/wallet.entity';
+import { Wallet } from '@/entity/wallet.entity';
 import { QueryRunner } from 'typeorm';
 
 export interface IWalletRepository {
