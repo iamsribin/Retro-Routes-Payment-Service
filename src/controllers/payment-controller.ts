@@ -1,83 +1,66 @@
-import { handleError } from '../utils/errorHandler';
 import { sendUnaryData, ServerUnaryCall } from '@grpc/grpc-js';
-import { IResponse } from '../types/common/common-res';
 import { ConformCashPaymentDto } from '../dto/paymentRes.dto';
 import { IPaymentService } from '../services/interface/i-payment-service';
 import { PaymentReq } from '../types/request';
+import { IncomingHttpHeaders } from 'http';
+import { IStripeService } from '../services/interface/i-stripe-service';
+import { InternalError, IResponse } from '@Pick2Me/shared';
+import { inject, injectable } from 'inversify';
+import { TYPES } from '@/types/inversify-types';
 
-export default class PaymentController {
-  constructor(private _paymentService: IPaymentService) {}
+@injectable()
+export class PaymentController {
+  constructor(
+    @inject(TYPES.PaymentService) private _paymentService: IPaymentService,
+    @inject(TYPES.StripeService) private _stripeService: IStripeService
+  ) {}
 
   async CreateCheckoutSession(
     call: ServerUnaryCall<PaymentReq, any>,
     callback: (error: Error | null, response: any) => void
   ) {
     try {
-      const result = await this._paymentService.createCheckoutSession(call.request);
+      const result = await this._stripeService.createCheckoutSession(call.request);
       callback(null, result);
     } catch (error) {
-      handleError(error, callback);
+      InternalError(error, callback);
     }
   }
 
-  // async ProcessWalletPayment(
-  //   call: ServerUnaryCall<any, any>,
-  //   callback: (error: Error | null, response: any) => void
-  // ) {
-  //   try {
-  //     const result = await this._paymentService.processWalletPayment(call.request);
-  //     callback(null, result);
-  //   } catch (error) {
-  //     handleError(error, callback);
-  //   }
-  // }
+  async handleStripeWebhook(rawBody: Buffer, headers: IncomingHttpHeaders): Promise<void> {
+    if (!rawBody || !headers) {
+      throw new Error('Missing webhook payload or headers');
+    }
+
+    try {
+      await this._stripeService.handleStripeWebhook(rawBody, headers);
+    } catch (err: any) {
+      console.error('PaymentController.handleStripeWebhook error', {
+        error: err?.message ?? err,
+      });
+      throw err;
+    }
+  }
 
   async ConformCashPayment(
-    call: ServerUnaryCall<{bookingId: string, userId: string, driverId: string, amount: number,idempotencyKey:string},any>,
-    callback:  sendUnaryData<IResponse<ConformCashPaymentDto>>
+    call: ServerUnaryCall<
+      {
+        bookingId: string;
+        userId: string;
+        driverId: string;
+        amount: number;
+        idempotencyKey: string;
+      },
+      any
+    >,
+    callback: sendUnaryData<IResponse<ConformCashPaymentDto>>
   ) {
-    try {      
+    try {
       const result = await this._paymentService.ConfirmCashPayment(call.request);
-      
-      callback(null, result); 
-    } catch (error) { 
-      handleError(error, callback);
+
+      callback(null, result);
+    } catch (error) {
+      InternalError(error, callback);
     }
   }
-
-  // async GetTransaction(
-  //   call: ServerUnaryCall<any, any>,
-  //   callback: (error: Error | null, response: any) => void
-  // ) {
-  //   try {
-  //     const transaction = await this._paymentService.getTransaction(call.request.transactionId);
-  //     callback(null, {
-  //       transactionId: transaction.transactionId,
-  //       bookingId: transaction.bookingId,
-  //       userId: transaction.userId,
-  //       driverId: transaction.driverId,
-  //       amount: transaction.amount,
-  //       paymentMethod: transaction.paymentMethod,
-  //       status: transaction.status,
-  //       createdAt: transaction.createdAt.toISOString(),
-  //       adminShare: transaction.adminShare,
-  //       driverShare: transaction.driverShare,
-  //     });
-  //   } catch (error) {
-  //     handleError(error, callback);
-  //   }
-  // }
-
-  // async HandleWebhook(
-  //   call: ServerUnaryCall<any, any>,
-  //   callback: (error: Error | null, response: any) => void
-  // ) {
-  //   try {
-  //     const result = await this._paymentService.handleWebhook(call.request.payload);
-  //     callback(null, result);
-  //   } catch (error) {
-  //     handleError(error, callback);
-  //   }
-  // }
-  
 }

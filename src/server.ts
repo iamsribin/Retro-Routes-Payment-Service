@@ -1,62 +1,51 @@
-import dotenv from 'dotenv';
-dotenv.config();
-import connectDB from './config/mongo';
-import PaymentController from './controllers/payment-controller';
-import {PaymentService} from './services/implementation/payment-service';
-import TransactionRepositoryImpl from './repositories/implementation/transaction.repository';
-import { logger } from './utils/logger';
+import 'dotenv/config';
 
-class App {
-  constructor() {
-    this.initialize();
-  }
+import app from './app';
+import { connectSQL } from './config/sql-db';
+import { startGrpcServer } from './grpc/server';
+import { isEnvDefined } from './utils/envChecker';
+import { connectDB, RabbitMQ } from '@Pick2Me/shared';
+import { UserEventConsumer } from './events/consumer';
 
-  private async initialize() {
-    await connectDB();
-    const transactionRepository = new TransactionRepositoryImpl();
-    const paymentService = new PaymentService(transactionRepository);
-    this.startGrpcServer(paymentService);
-  }
+const startServer = async () => {
+  try {
+    isEnvDefined();
 
-  private startGrpcServer(paymentService: PaymentService) {
-    const grpc = require('@grpc/grpc-js');
-    const protoLoader = require('@grpc/proto-loader');
-    const path = require('path');
+    connectDB(process.env.MONGO_URL!);
+    await connectSQL();
 
-    const packageDef = protoLoader.loadSync(path.resolve(__dirname, './proto/payment.proto'), {
-      keepCase: true,
-      longs: String,
-      enums: String,
-      defaults: true,
-      oneofs: true,
+    await RabbitMQ.connect({
+      url: process.env.RABBIT_URL!,
+      serviceName: 'payment-service',
     });
 
-    const grpcObject = grpc.loadPackageDefinition(packageDef);
-    const paymentPackage = grpcObject.payment_package;
+    await UserEventConsumer.init();
 
-    const server = new grpc.Server();
-    
-    const paymentController = new PaymentController(paymentService);
+    startGrpcServer();
 
-    server.addService(paymentPackage.Payment.service, {
-      CreateCheckoutSession: paymentController.CreateCheckoutSession.bind(paymentController),
-      // ProcessWalletPayment: paymentController.ProcessWalletPayment.bind(paymentController),
-      ConformCashPayment: paymentController.ConformCashPayment.bind(paymentController),
-      // GetTransaction: paymentController.GetTransaction.bind(paymentController),
-      // HandleWebhook: paymentController.HandleWebhook.bind(paymentController),
-    });
-
-    const port = process.env.PAYMENT_GRPC_PORT || '5003';
-    // const domain = process.env.NODE_ENV === 'dev' ? process.env.DEV_DOMAIN : process.env.PRO_DOMAIN_PAYMENT;
-   const domain = "localhost"
-    server.bindAsync(`${domain}:${port}`, grpc.ServerCredentials.createInsecure(), (err: any, bindPort: number) => {
-      if (err) {
-        logger.error('Error starting gRPC server:', err);
-        return;
-      }
-      logger.info(`gRPC payment server started on port ${bindPort}`);
-    });
+    const port = Number(process.env.PORT) || 3000;
+    await app.listen({ port, host: '0.0.0.0' });
+    app.log.info(`payment service running on port ${port}`);
+  } catch (err: unknown) {
+    app.log.error(err);
+    process.exit(1);
   }
-}
+};
 
-export default App;
+startServer();
+
+const shutdown = async () => {
+  try {
+    app.log.info('Shutting down...');
+    await app.close();
+    // await consumer.stop?.();
+    // await stopGrpcServer?.();
+    process.exit(0);
+  } catch (e) {
+    app.log.error(e);
+    process.exit(1);
+  }
+};
+
+process.on('SIGINT', shutdown);
+process.on('SIGTERM', shutdown);

@@ -1,8 +1,8 @@
 import amqp from 'amqplib';
 
 export class RabbitMQPublisher {
-  private static ch: any; // Using any to avoid type conflicts
-  private static conn: any; // Using any to avoid type conflicts
+  private static ch: any;
+  private static conn: any;
   private static isInitialized: boolean = false;
 
   static async initialize(channel: any) {
@@ -10,32 +10,34 @@ export class RabbitMQPublisher {
     this.isInitialized = true;
   }
 
-  // Lazy initialization method
   private static async ensureInitialized() {
     if (!this.isInitialized) {
       try {
         const RABBIT_URL = process.env.RABBIT_URL || 'amqp://localhost';
         this.conn = await amqp.connect(RABBIT_URL);
         this.ch = await this.conn.createChannel();
-        
+
         // Assert the exchange
-        await this.ch.assertExchange('retro.routes', 'topic', { durable: true });
-        
+        await this.ch.assertExchange('retro.routes', 'topic', {
+          durable: true,
+        });
+
         this.isInitialized = true;
-        console.log("✅ RabbitMQ Publisher auto-initialized");
+        console.log('✅ RabbitMQ Publisher auto-initialized');
       } catch (error) {
-        console.error("❌ Failed to auto-initialize RabbitMQ Publisher:", error);
+        console.error('❌ Failed to auto-initialize RabbitMQ Publisher:', error);
         throw error;
       }
     }
   }
 
   static async publish(routingKey: string, data: any): Promise<void> {
-    // Ensure channel is initialized before publishing
     await this.ensureInitialized();
-    
+
     if (!this.ch) {
-      throw new Error('RabbitMQ channel not initialized. Call RabbitMQPublisher.initialize(channel) first.');
+      throw new Error(
+        'RabbitMQ channel not initialized. Call RabbitMQPublisher.initialize(channel) first.'
+      );
     }
 
     try {
@@ -43,11 +45,13 @@ export class RabbitMQPublisher {
       const published = this.ch.publish('retro.routes', routingKey, message, {
         persistent: true,
         messageId: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-        timestamp: Date.now()
+        timestamp: Date.now(),
       });
 
       if (!published) {
-        console.warn('Publish returned false (internal buffer full) — message queued in client buffer');
+        console.warn(
+          'Publish returned false (internal buffer full) — message queued in client buffer'
+        );
       }
 
       console.log(`✅ Published message to ${routingKey}`);
@@ -57,7 +61,6 @@ export class RabbitMQPublisher {
     }
   }
 
-  // Cleanup method for graceful shutdown
   static async close() {
     try {
       if (this.ch && typeof this.ch.close === 'function') {
@@ -67,9 +70,9 @@ export class RabbitMQPublisher {
         await this.conn.close();
       }
       this.isInitialized = false;
-      console.log("✅ RabbitMQ Publisher connection closed");
+      console.log('✅ RabbitMQ Publisher connection closed');
     } catch (error) {
-      console.error("❌ Error closing RabbitMQ Publisher:", error);
+      console.error('❌ Error closing RabbitMQ Publisher:', error);
     }
   }
 }

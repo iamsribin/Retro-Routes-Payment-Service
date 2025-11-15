@@ -1,8 +1,8 @@
-import { TransactionRepository } from '../repository';
-import { ITransaction } from '../../models/transaction.modal';
-import { TransactionModel } from '../../models/transaction.modal';
+import { ITransaction } from '@/models/transaction.modal';
+import { TransactionModel } from '@/models/transaction.modal';
+import { ITransactionRepository } from '../interfaces/repository';
 
-export default class TransactionRepositoryImpl extends TransactionRepository {
+export default class TransactionRepositoryImpl implements ITransactionRepository {
   async create(transaction: Partial<ITransaction>): Promise<ITransaction> {
     return await TransactionModel.create(transaction);
   }
@@ -16,11 +16,16 @@ export default class TransactionRepositoryImpl extends TransactionRepository {
   }
 
   async update(transactionId: string, update: Partial<ITransaction>): Promise<ITransaction | null> {
-    return await TransactionModel.findOneAndUpdate({ transactionId }, update, { new: true });
+    return await TransactionModel.findOneAndUpdate({ transactionId }, update, {
+      new: true,
+    });
   }
 
   // --- New method 1 ---
-  async updateStatus(transactionId: string, status: 'pending' | 'completed' | 'failed'): Promise<ITransaction | null> {
+  async updateStatus(
+    transactionId: string,
+    status: 'pending' | 'completed' | 'failed'
+  ): Promise<ITransaction | null> {
     return await TransactionModel.findOneAndUpdate(
       { transactionId },
       { status, updatedAt: new Date() },
@@ -29,7 +34,10 @@ export default class TransactionRepositoryImpl extends TransactionRepository {
   }
 
   // --- New method 2 ---
-  async updateStatusByKey(idempotencyKey: string, status: 'pending' | 'completed' | 'failed'): Promise<ITransaction | null> {
+  async updateStatusByKey(
+    idempotencyKey: string,
+    status: 'pending' | 'completed' | 'failed'
+  ): Promise<ITransaction | null> {
     return await TransactionModel.findOneAndUpdate(
       { idempotencyKey },
       { status, updatedAt: new Date() },
