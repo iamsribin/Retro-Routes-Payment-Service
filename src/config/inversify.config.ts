@@ -16,7 +16,7 @@ import { WalletRepository } from '@/repositories/implementation/wallet.repositor
 import { ITransactionRepository } from '@/repositories/interfaces/repository';
 import TransactionRepositoryImpl from '@/repositories/implementation/transaction.repository';
 import { AppDataSource } from './sql-db';
-import { Wallet } from '@/interfaces/wallet.entity';
+import { Wallet } from '@/entity/wallet.entity';
 import { Repository } from 'typeorm';
 
 const container = new Container();
